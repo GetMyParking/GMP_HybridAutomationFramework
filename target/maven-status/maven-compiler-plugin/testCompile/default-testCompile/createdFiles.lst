@@ -1,0 +1,7 @@
+Dashboard/TestLogin.class
+Pages/Dashboard/PageLogin.class
+TestNGListeners/Listeners.class
+Mobile/TestLogin.class
+Pages/Mobile/PageLogin.class
+Pages/Mobile/LoginPage.class
+Pages/Mobile/PageSelectCountry.class
