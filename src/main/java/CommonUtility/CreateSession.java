@@ -31,26 +31,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 public class CreateSession 
 {
 
-	//public static WebDriver driver;
-	//public static AppiumDriver<WebElement> appiumDriver;
-	//public static Properties prop;
-	//public static DesiredCapabilities desiredcap;
-	//public static String appiumServerURL;
-	//public static String URL;
-	//public static String browserName;
-	//public static String launchbrowser;
-	//public static String launchmobileapp;
-	//public static String screenshotfor;
-	//public static Logger Log = (Logger) LogManager.getLogger(CreateSession.class.getName());
 	
-	//public static String Environment, Country;
-	/*
-	public static void logInfo(String info)
-	{
-		System.out.println(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss  ").format(new Date()).toString() + info);
-		AutomationConfiguration.Log.info(info);
-	}
-	*/
 	
 	public WebDriver getDriver()
 	{
@@ -179,13 +160,13 @@ public class CreateSession
 			AutomationConfiguration.URL = AutomationConfiguration.PropertyFile.getProperty("url").toString();
 			if(AutomationConfiguration.BrowserName.toUpperCase().equals("CHROME"))
 			{
-				AutomationConfiguration.logInfo("Launching Chrome browser");
-				WebDriverManager.chromedriver().setup();
-				AutomationConfiguration.Driver = new ChromeDriver();
-				AutomationConfiguration.Driver.manage().window().maximize();
-				AutomationConfiguration.logInfo("Sucessfully launched Chrome Browser");
-				AutomationConfiguration.Driver.get(AutomationConfiguration.URL);
-				AutomationConfiguration.logInfo("Successfully navigate to URL: "+ AutomationConfiguration.URL);
+					AutomationConfiguration.logInfo("Launching Chrome browser");
+					WebDriverManager.chromedriver().setup();
+					AutomationConfiguration.Driver = new ChromeDriver();
+					AutomationConfiguration.Driver.manage().window().maximize();
+					AutomationConfiguration.logInfo("Sucessfully launched Chrome Browser");
+					AutomationConfiguration.Driver.get(AutomationConfiguration.URL);
+					AutomationConfiguration.logInfo("Successfully navigate to URL: "+ AutomationConfiguration.URL);
 				
 			}
 			else if (AutomationConfiguration.BrowserName.toUpperCase().equals("FIREFOX"))

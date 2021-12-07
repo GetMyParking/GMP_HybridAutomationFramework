@@ -26,8 +26,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import CommonUtility.AutomationConfiguration;
 
-import CommonUtility.CreateSession;
-
 
 /**
  * Implementaion of the Apache POI API for the test data read from excel file.

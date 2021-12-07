@@ -78,8 +78,8 @@ public class SessionCreationPage {
 	
 	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/tv_cost")
 	private WebElement MySessionsTotalCost;
-	
-	@AndroidFindBy(xpath="//androidx.appcompat.app.ActionBar.Tab[@content-desc='Expired']")
+	//					  //androidx.appcompat.app.ActionBar.Tab[@content-desc="Expired"]
+	@AndroidFindBy(xpath="//android.widget.LinearLayout[@content-desc='Expired']")
 	private WebElement MySessionsGotoExpiredSessions;
 	
 	public String ActiveSessionID;
@@ -132,7 +132,7 @@ public class SessionCreationPage {
 			MenuMySessions.click();
 			Thread.sleep(8000);
 			
-			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,MySessionsGotoExpiredSessions,100);
+			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,MySessionsGotoExpiredSessions,10);
 			MySessionsGotoExpiredSessions.click();
 			Thread.sleep(3000);
 			
@@ -214,8 +214,9 @@ public class SessionCreationPage {
 
 	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/tv_message")
 	private WebElement paymentConfirmMsg;
-
-	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/btn_confirm_pay")
+//com.apcoaflow.consumer.staging:id/tv_confirm_pay
+	//com.apcoaflow.consumer.staging:id/btn_confirm_pay
+	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/tv_confirm_pay")
 	private WebElement payAmount; 
 
 	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/tv_success_heading")
@@ -554,6 +555,7 @@ public class SessionCreationPage {
 			Thread.sleep(12000);
 			
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,payAmount,30);
+			//com.apcoaflow.consumer.staging:id/btn_confirm_pay
 			ApcoaListeners.logInfo("payAmount.getText(): "+payAmount.getText());
 			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,payAmount,15);
 			

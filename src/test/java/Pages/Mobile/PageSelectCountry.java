@@ -19,8 +19,6 @@ public class PageSelectCountry {
 	
 	By selectCountryName = By.className("android.widget.TextView");
 	
-	//	
-	//com.apcoaflow.consumer.staging:id/tv_next
 	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/text")
 	WebElement selectCountryButton;
 	
@@ -62,7 +60,7 @@ public class PageSelectCountry {
 				break;
 			}
 		}
-		//Thread.sleep(3000);
+		
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,selectCountryButton,15);
 		CountrySelected = selectCountryButton.getText().toString();
 		ApcoaListeners.logInfo("selectCountry ended: country selected: "+ selectCountryButton.getText());
@@ -84,11 +82,18 @@ public class PageSelectCountry {
 	{
 		ApcoaListeners.logInfo("Going to click Login button");
 		btnLog.click();
-		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,nextbtn,80);
-		nextbtn.click();
-		PageHomeApcoa home = new PageHomeApcoa(AutomationConfiguration.AppiumDriver);
-		home.acceptPushNotification();
-		ApcoaListeners.logInfo("Clicked Login button successfully");
+		try 
+		{
+			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,nextbtn,30);
+			nextbtn.click();
+			PageHomeApcoa home = new PageHomeApcoa(AutomationConfiguration.AppiumDriver);
+			home.acceptPushNotification();
+			ApcoaListeners.logInfo("Clicked Login button successfully");
+		}
+		catch(Exception e)
+		{	
+		}
+		
 	}
 	
 

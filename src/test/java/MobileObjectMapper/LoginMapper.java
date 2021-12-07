@@ -5,9 +5,20 @@ public class LoginMapper {
 
 	private String email;
     private String password;
+    private String username;
     
     public LoginMapper(){}
 	   
+    public String getUserName() 
+    {
+    	return username;
+	}
+    
+    public void setUsername(String username)
+    {
+    	this.username= username;
+    }
+    
     public String getEmail() {
     	return email;
 	}

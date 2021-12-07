@@ -69,7 +69,7 @@ public class PageHomeApcoa {
 	public void acceptPushNotification()
 	{
 		
-		GenericMethods.explicitWaitForWebElementOnly(driver, acceptPushNotificationBtn,75);
+		GenericMethods.explicitWaitForWebElementOnly(driver, acceptPushNotificationBtn,45);
 		ApcoaListeners.logInfo("Going to click Accept Push Notification ");
 		acceptPushNotificationBtn.click();
 		ApcoaListeners.logInfo("Clicked Accept Push Notification button sucessfully.");

@@ -16,7 +16,6 @@ package CommonUtility;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
@@ -145,6 +144,49 @@ public class GenericMethods {
         
     }
     
+    public static void sendKeys(WebDriver driver, WebElement targetElement,String data,boolean ismandetory, int timeOut, String onFailureMessage)
+    {
+    	try 
+    	{
+    		WebDriverWait wait = new WebDriverWait(driver, timeOut);
+            wait.until(ExpectedConditions.visibilityOf(targetElement));
+            targetElement.clear();
+            targetElement.sendKeys(data);
+            
+            
+    	}
+    	catch(Exception e)
+    	{
+    		if(ismandetory)
+    		{
+    			AutomationConfiguration.SoftAsserts.assertFalse(false, onFailureMessage);
+    		}
+    	}
+    }
+    
+    
+    
+    
+    public static void click(WebDriver driver, WebElement targetElement,boolean ismandetory, int timeOut, String onFailureMessage)
+    {
+    	try 
+    	{
+    		WebDriverWait wait = new WebDriverWait(driver, timeOut);
+            wait.until(ExpectedConditions.visibilityOf(targetElement));
+            targetElement.click();
+            
+            
+    	}
+    	catch(Exception e)
+    	{
+    		if(ismandetory)
+    		{
+    			AutomationConfiguration.SoftAsserts.assertFalse(false, onFailureMessage);
+    		}
+    	}
+    }
+    
+    
     
     public static void explicitWaitForWebElementOnly(WebDriver driver, WebElement targetElement,int timeOut) 
     {
@@ -157,7 +199,7 @@ public class GenericMethods {
     	} 
     	catch (TimeoutException e) 
     	{
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
             throw e;
 
         }

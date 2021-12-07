@@ -2,6 +2,8 @@ package Mobile;
 
 import java.io.IOException;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
@@ -12,6 +14,8 @@ import CommonUtility.AutomationConfiguration;
 import CommonUtility.CreateSession;
 import DataDriven.ExcelDriven;
 import MobileObjectMapper.LoginMapper;
+import MobileObjectMapper.ParkingMapper;
+import MobileObjectMapper.VehicleMapper;
 import Pages.Mobile.PageAddVehicle;
 import Pages.Mobile.PageHomeApcoa;
 import Pages.Mobile.PageLogin;
@@ -20,7 +24,11 @@ import Pages.Mobile.PageSelectCountry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestLogin {
+	//old
+	// /Users/karankumaragarwal/Downloads/staging_1.0.60_100_apcoaflow_2021112507.apk
 	
+	// new
+	// /Users/karankumaragarwal/Downloads/staging_1.0.60_100_apcoaflow_2021120212.apk
 	
 	public String ExpectedExtendedParkingPrice="0.00";
 	public String ExpectedSessionEndSuccessmsg="Your session has been ended";
@@ -59,11 +67,60 @@ public class TestLogin {
 		
 	}
 	
+	@DataProvider
+	public VehicleMapper[] getVehicleData() throws Exception
+	{
+		String excelfilepath = System.getProperty("user.dir") + "/src/test/java/resources/AppcoaDataset.xlsx";
+		ExcelDriven.readExcelFile(excelfilepath, AutomationConfiguration.Environment);
+		String data = ExcelDriven.readDataRowandColumn(AutomationConfiguration.Environment,AutomationConfiguration.Country,"Add Vehicle");
+		
+		ObjectMapper mapper = new ObjectMapper();
+		VehicleMapper []login = new VehicleMapper[1];
+		login[0] = mapper.readValue(data, VehicleMapper.class);
+	    System.out.println(login[0].getlpr());
+	
+	    return login;
+		
+	}
+	
+	
+	@DataProvider
+	public ParkingMapper[] getParkingData() throws Exception
+	//public void getParkingData() throws Exception
+	{
+		String excelfilepath = System.getProperty("user.dir") + "/src/test/java/resources/AppcoaDataset.xlsx";
+		ExcelDriven.readExcelFile(excelfilepath, AutomationConfiguration.Environment);
+		String data = ExcelDriven.readDataRowandColumn(AutomationConfiguration.Environment,AutomationConfiguration.Country,"Session");
+		
+		ObjectMapper mapper = new ObjectMapper();
+		ParkingMapper []login = new ParkingMapper[1];
+		login[0] = mapper.readValue(data, ParkingMapper.class);
+	    System.out.println(login[0].getparkingidentifier());
+	    System.out.println(login[0].getparkingname());
+	
+	    return login;
+		
+	}
+	
+	
+	@BeforeMethod
+	public void initializeAssertions()
+	{
+		AutomationConfiguration.SoftAsserts = new SoftAssert();
+	}
+	
+	@AfterMethod
+	public void AssertAll()
+	{
+		AutomationConfiguration.SoftAsserts.assertAll();;
+	}
 	
 
 	@Test(priority=1)
-	public void SelectCountry() throws InterruptedException
+	public void selectCountry() throws Exception
 	{
+		//getVehicleData();
+		//getParkingData();
 		Thread.sleep(15000);
 		PageSelectCountry selectcountry = new PageSelectCountry(AutomationConfiguration.AppiumDriver);
 		selectcountry.selectCountryClick();
@@ -73,7 +130,6 @@ public class TestLogin {
 		selectcountry.btnLoginClick();
 		SoftAssert softAssert = new SoftAssert();
 		softAssert.assertEquals(AutomationConfiguration.Country.toUpperCase(), selectcountry.CountrySelected.toUpperCase(),"Country not selected" );
-		//int a= 5/0;
 		softAssert.assertAll();
 	}
 	
@@ -88,21 +144,30 @@ public class TestLogin {
 		login.clickContinue();
 		
 		PageHomeApcoa home = new PageHomeApcoa(AutomationConfiguration.AppiumDriver);
+		home.acceptPushNotification();
+		
 		home.checkUserName();
-		//home.acceptPushNotification();
+		
 		
 		SoftAssert softAssert = new SoftAssert();
-		softAssert.assertEquals("karan agarwal".toUpperCase(),home.Username.toUpperCase(),"Not correct credentials" );
+		softAssert.assertEquals(loginMapper.getUserName().toUpperCase(),home.Username.toUpperCase() );
 		softAssert.assertAll();
 	
 	}
 	
-	
-	
-	@Test(priority=3)
-	public void addVehicle() throws InterruptedException
+	//@Test(priority=3)
+	public void testexpired()
 	{
-		String vehicleno = "W 7777 R";
+		Pages.Mobile.SessionCreationPage SC=new Pages.Mobile.SessionCreationPage(AutomationConfiguration.AppiumDriver);
+		SC.GotoMyExpiredSessions();
+	}
+	
+	
+	@Test(priority=3,dataProvider="getVehicleData")
+	public void addVehicle(VehicleMapper vehicleMapper) throws InterruptedException
+	{
+		//System.out.println("inside the addvehicle: "+vehicleMapper.getlpr());
+		String vehicleno = vehicleMapper.getlpr();
 		SoftAssert softAssert = new SoftAssert();
 		PageAddVehicle addvehicle = new PageAddVehicle(AutomationConfiguration.AppiumDriver);
 		addvehicle.addVehicle(vehicleno);
@@ -114,12 +179,17 @@ public class TestLogin {
 		softAssert.assertAll();
 		
 	}
+
+	//testaustriastaging@yopmail.com
+	//testing
+
 	
-	@Test(priority=5)
-		public void deleteVehicle() throws InterruptedException
+	@Test(priority=5,dataProvider="getVehicleData")
+		public void deleteVehicle(VehicleMapper vehicleMapper) throws InterruptedException
 		{
+			//System.out.println("inside the deletevehicle: "+vehicleMapper.getlpr());
 			Thread.sleep(8000);
-			String vehicleno = "W 7777 R";
+			String vehicleno = vehicleMapper.getlpr();
 			SoftAssert softAssert = new SoftAssert();
 			PageAddVehicle delvehicle = new PageAddVehicle(AutomationConfiguration.AppiumDriver);
 			delvehicle.deletelpr();
@@ -134,14 +204,14 @@ public class TestLogin {
 		}
 
 	
-	@Test(priority = 4, enabled = true)
-	public void Start_Extend_Stop_Session() throws InterruptedException 
+	@Test(priority = 4,dataProvider="getParkingData")
+	public void startExtendStopSession(ParkingMapper parkingMapper) throws InterruptedException 
 	{
 		Thread.sleep(8000);
 		Pages.Mobile.SessionCreationPage SC=new Pages.Mobile.SessionCreationPage(AutomationConfiguration.AppiumDriver);
 		
-		String  Parkingname="Ringturm -",
-				FullParkingName = "Ringturm - Vienna | APCOA",
+		String  Parkingname=parkingMapper.getparkingidentifier(),
+				FullParkingName = parkingMapper.getparkingname(),
 				country=AutomationConfiguration.Country;
 				
 		SoftAssert softAssert = new SoftAssert();
