@@ -2,23 +2,23 @@ package MobileObjectMapper;
 
 public class VehicleMapper {
 
-	private String lpr;
-    
-    public VehicleMapper(){}
-	   
-    public String getlpr() {
-    	return lpr;
-	}
-	   
-    public void setlpr(String lpr) {
-	
-    	this.lpr = lpr;
-	   
+    private String lpr;
+
+    public VehicleMapper() {
     }
-	
-   public String toString(){
-	
-	   return "vehicle: { lpr:"+lpr+"}";
-	   
-   }
+
+    public String getLpr() {
+        return lpr;
+    }
+
+    public void setLpr(String lpr) {
+        this.lpr = lpr;
+    }
+
+    @Override
+    public String toString() {
+        return "VehicleMapper{" +
+                "lpr='" + lpr + '\'' +
+                '}';
+    }
 }
