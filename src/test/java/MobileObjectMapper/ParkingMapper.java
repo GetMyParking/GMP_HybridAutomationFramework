@@ -6,31 +6,28 @@ public class ParkingMapper {
     private String parkingidentifier;
     
     public ParkingMapper(){}
-	   
-    public String getparkingname() {
-    	return parkingname;
-	}
-	   
-    public void setparkingname(String parkingname) {
-	
-    	this.parkingname = parkingname;
-	   
-    }
-	
-    public String getparkingidentifier() {
 
-    	return parkingidentifier;
-   
+    public String getParkingname() {
+        return parkingname;
     }
-   public void setparkingidentifier(String parkingidentifier) {
 
-	   this.parkingidentifier = parkingidentifier;
-	   
-   }
-	
-   public String toString(){
-	
-	   return "Parking: { parkingname:"+parkingname+",  parkingidentifier:"+ parkingidentifier+ "}";
-	   
-   }
+    public void setParkingname(String parkingname) {
+        this.parkingname = parkingname;
+    }
+
+    public String getParkingidentifier() {
+        return parkingidentifier;
+    }
+
+    public void setParkingidentifier(String parkingidentifier) {
+        this.parkingidentifier = parkingidentifier;
+    }
+
+    @Override
+    public String toString() {
+        return "ParkingMapper{" +
+                "parkingname='" + parkingname + '\'' +
+                ", parkingidentifier='" + parkingidentifier + '\'' +
+                '}';
+    }
 }

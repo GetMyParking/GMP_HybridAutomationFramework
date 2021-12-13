@@ -11,13 +11,10 @@ Purpose /Description: Implementation of the reporting that is
 
 */
 
-
-
 package CommonUtility;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
@@ -33,10 +30,7 @@ public class ExtentReporterNG {
      * method to return ExtentReports object
      *
      */
-	public static ExtentReports getReportObject()
-	{
-		
-		
+	public static ExtentReports getReportObject(){
 		String path = System.getProperty("user.dir").toString()+"/Output/Reports/"+"/ExtentReport" + new SimpleDateFormat("yyyy_MM_dd___hh_mm_ss'.html'").format(new Date()).toString();
 		ExtentSparkReporter reporter = new ExtentSparkReporter(path);
 		AutomationConfiguration.logInfo("Extent Report File path: "+path);
@@ -45,8 +39,6 @@ public class ExtentReporterNG {
 		extent = new ExtentReports();
 		extent.attachReporter(reporter);
 		extent.setSystemInfo("Tester", "Karan Agarwal");
-		return extent;
-		
+		return extent;		
 	}
-
 }

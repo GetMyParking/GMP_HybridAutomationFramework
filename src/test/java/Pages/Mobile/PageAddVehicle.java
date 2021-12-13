@@ -15,56 +15,45 @@ public class PageAddVehicle {
 	
 	WebDriver driver;
 	
-	
-	@AndroidFindBy(xpath="/hierarchy/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.widget.RelativeLayout/android.widget.TextView[3]")
-	WebElement btAllow;
-	
-	
-	@AndroidFindBy(xpath="/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.RelativeLayout/androidx.drawerlayout.widget.DrawerLayout/android.view.ViewGroup/android.widget.LinearLayout/android.view.ViewGroup/android.widget.RelativeLayout/android.widget.ImageView[1]")
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/iv_menu')]")
 	WebElement btnMenu;
 	
-	
-	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/tv_vehicle_nav")
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/tv_vehicle_nav')]")
 	WebElement btnNavVehicle;
 	
-	
-	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/iv_add")
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/iv_add')]")
 	WebElement btnAddVehicle;
 	
-	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/et_vehicle_number")
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/et_vehicle_number')]")
 	WebElement edtbxAddVehicle;
 	
-	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/btn_save")
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/btn_save')]")
 	WebElement btnSaveVehicle;
 	
-	
-	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/btn_save")
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/btn_save')]")
 	WebElement btnbacktohome;
 	
-	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/tv_search")
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/tv_search')]")
 	WebElement btnsearchparking;
 	
-	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/edt_Search")
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/edt_Search')]")
 	WebElement edtxsearchparking;
 	
-	//(//android.widget.TextView[@resource-id='com.apcoaflow.consumer.staging:id/tv_vehicle_number'])[1]
-	@AndroidFindBy(xpath="(//android.widget.TextView[@resource-id='com.apcoaflow.consumer.staging:id/tv_vehicle_number'])[1]")
+	@AndroidFindBy(xpath="(//*[contains(@resource-id,':id/tv_vehicle_number')])[1]")
 	WebElement txtfirstlpr;
 	
-	@AndroidFindBy(xpath="(//android.widget.ImageView[@resource-id='com.apcoaflow.consumer.staging:id/iv_delete_vehicle'])[1]")
+	@AndroidFindBy(xpath="(//*[contains(@resource-id,':id/iv_delete_vehicle')])[1]")
 	WebElement btnfirstlprdel;
 	
-	@AndroidFindBy(id="com.apcoaflow.consumer.staging:id/actv_positive_button")
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/actv_positive_button')]")
 	WebElement btnconfirmdel;
 		
-	public PageAddVehicle(WebDriver driver)
-	{
+	public PageAddVehicle(WebDriver driver){
 		this.driver = driver;
 		PageFactory.initElements(new AppiumFieldDecorator (driver), this);
 	}
 	
-	public String getfirstvehiclelpr()
-	{
+	public String getfirstvehiclelpr(){
 		return txtfirstlpr.getText();
 	}
 	
@@ -85,11 +74,9 @@ public class PageAddVehicle {
 		ApcoaListeners.logInfo("Delete Vehicle End");
 	}
 	
-	public void addVehicle(String vehiclenumber) throws InterruptedException
-	{
+	public void addVehicle(String vehiclenumber) throws InterruptedException{
 	
 		ApcoaListeners.logInfo("Add Vehicle Start");
-		System.out.println("Going to add Vehicle");
 		Thread.sleep(5000);
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,btnMenu,30);
 		btnMenu.click();
@@ -107,13 +94,9 @@ public class PageAddVehicle {
 		btnSaveVehicle.click();
 		Thread.sleep(8000);
 		ApcoaListeners.logInfo("Add Vehicle End");
-
 	}
 	
-	public static void goBack()
-	{
+	public static void goBack(){
 		((AndroidDriver<WebElement>) AutomationConfiguration.AppiumDriver).pressKey(new KeyEvent().withKey(AndroidKey.BACK));
 	}
-	
-
 }
