@@ -25,9 +25,11 @@ public class PageLogin {
 		PageFactory.initElements(new AppiumFieldDecorator (driver), this);
 	}
 		
-	public void enterCredentials(String email, String password){
+	public void enterCredentials(String email, String password) throws InterruptedException{
 		ApcoaListeners.logInfo("Going to Login with credentials: "+ email+" -> "+ password);
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,edtxtEmail,200);
+		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,edtxtPassword,200);
+		Thread.sleep(3000);
 		edtxtEmail.sendKeys(email);
 		edtxtPassword.sendKeys(password);
 		ApcoaListeners.logInfo("Credentials entered successfully ");
@@ -39,4 +41,6 @@ public class PageLogin {
 		btnLogin.click();
 		ApcoaListeners.logInfo("Clicked Login button sucessfully.");
 	}
+	
+	
 }

@@ -225,6 +225,29 @@ public class SessionCreationPage {
 	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/tv_start_session')]")
 	private WebElement gmpstartsession;
 	
+	@AndroidFindBy(xpath="(//*[contains(@resource-id,':id/iv_selected_mode')])[3]")
+	private WebElement tarrifSelection;
+//	(//*[contains(@resource-id,':id/cl_nearby_parking')]//android.widget.LinearLayout)[3]
+	
+	@AndroidFindBy(xpath="(//*[contains(@resource-id,':id/cl_nearby_parking')]//android.widget.LinearLayout)[3]")
+	private WebElement openstartsession;
+	
+	@AndroidFindBy(xpath="(//*[contains(@resource-id,':id/iv_selected_mode')])[2]")
+	private WebElement bactarrifSelection;
+	
+	@AndroidFindBy(xpath="(//*[contains(@resource-id,':id/iv_selected_mode')])[4]")
+	private WebElement oneParkingtarrifSelection;
+	
+	@AndroidFindBy(xpath="(//*[contains(@resource-id,':id/iv_selected_mode')])[4]")
+	private WebElement gmptarrifSelection;
+	
+	@AndroidFindBy(xpath="(//*[contains(@resource-id,':id/iv_selected_mode')])[3]")
+	private WebElement elitetarrifSelection;
+	
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/btn_park_now')]")
+	private WebElement btnParkNow;
+
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public SessionCreationPage(AppiumDriver driver){
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
@@ -235,14 +258,14 @@ public class SessionCreationPage {
 	
 	public void GotoMyActiveSessions() {
 		try{
-			Thread.sleep(5000);
+			Thread.sleep(2000);
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,btnMenu,100);
 			btnMenu.click();
 
-			Thread.sleep(3000);
+			Thread.sleep(2000);
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,MenuMySessions,100);
 			MenuMySessions.click();
-			Thread.sleep(8000);
+			Thread.sleep(2000);
 
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,MySessionsSessionID,100);
 			ActiveSessionID = MySessionsSessionID.getText();
@@ -300,7 +323,7 @@ public class SessionCreationPage {
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,searchParking,30);
 			searchParking.sendKeys(ParkingName);
 
-			Thread.sleep(15000);
+			Thread.sleep(8000);
 			boolean temp = selectParking2.isDisplayed();
 			if(temp){
 				selectParking2.click();
@@ -365,33 +388,54 @@ public class SessionCreationPage {
 
 	}
 
+	
+	
+	
 	public void dialerMovement(String Country) {
 		try{
-			ApcoaListeners.logInfo("dialerMovement start");
+			ApcoaListeners.logInfo("Dialer Movement for start Session: start");
+			ApcoaListeners.logInfo("Country: "+Country);
 			Thread.sleep(15000);
-			if(Country.equalsIgnoreCase("Sweden")){
-				//action.press(PointOption.point(538, 1173)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(747, 1595)).release().perform(); //emualator
-				action.press(PointOption.point(361, 891)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(520, 1165)).release().perform();	
-			}else  if(Country.equalsIgnoreCase("Austria")){
-				ApcoaListeners.logInfo("dialerMovement Austria");
-				action.press(PointOption.point(553, 1427)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(847, 1640)).release().perform();
-				ApcoaListeners.logInfo("dialerMovement Austria end");
-			}else if(Country.equalsIgnoreCase("Poland")) {
-				//action.press(PointOption.point(538, 1173)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(689, 1653)).release().perform(); //emulator
-				action.press(PointOption.point(359, 891)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(532, 1136)).release().perform();
-			}else if(Country.equalsIgnoreCase("India"))
-			{
-				ApcoaListeners.logInfo("dialerMovement India");
-				action.press(PointOption.point(553, 1427)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(847, 1640)).release().perform();
-				ApcoaListeners.logInfo("dialerMovement India end");
-			}else{
-				//action.press(PointOption.point(542, 1173)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(701, 1641)).release().perform(); //emulator
-				action.press(PointOption.point(359, 891)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(483, 1212)).release().perform();
+			if(AutomationConfiguration.Environment.equalsIgnoreCase("Production") && AutomationConfiguration.Tenant.equalsIgnoreCase("Apcoa")) {
+				action.press(PointOption.point(553, 1427)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(200))).moveTo(PointOption.point(602, 1444)).release().perform();
+			}else {
+				if(Country.equalsIgnoreCase("Sweden")){
+					dailerRotationControl(25);
+					//action.press(PointOption.point(361, 891)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(520, 1165)).release().perform();	
+				}else  if(Country.equalsIgnoreCase("Austria")){
+					dailerRotationControl(25);
+					//action.press(PointOption.point(553, 1427)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(847, 1640)).release().perform();
+				}else if(Country.equalsIgnoreCase("Poland")) {
+					//action.press(PointOption.point(538, 1173)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(689, 1653)).release().perform(); //emulator
+					dailerRotationControl(25);
+					//action.press(PointOption.point(359, 891)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(532, 1136)).release().perform();
+				}else if(Country.equalsIgnoreCase("India")){
+					dailerRotationControl(25);
+				}else if(Country.equalsIgnoreCase("Brazil")){
+					dailerRotationControl(25);
+				}else if(Country.equalsIgnoreCase("Dubai")){
+					dailerRotationControl(25);
+				}else if(Country.equalsIgnoreCase("United States")){
+					dailerRotationControl(25);
+				}else if(Country.equalsIgnoreCase("United States Elite")){
+					dailerRotationControl(25);
+				}else if(Country.equalsIgnoreCase("New India")){
+					dailerRotationControl(25);
+				}else if(Country.equalsIgnoreCase("Australia")){
+				    dailerRotationControl(25);
+				}else{
+					dailerRotationControl(25);
+				}
+			}
+			ApcoaListeners.logInfo("Dialer Movement for start Session: ends");
+			if(AutomationConfiguration.Environment.equalsIgnoreCase("Production") && AutomationConfiguration.Tenant.equalsIgnoreCase("Apcoa")) {
+				PageBuyPass pbp = new PageBuyPass(driver);
+				pbp.applyPromoCode("REGTESTAT");
 			}
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,ParkingPrice,30);
 			Parkingprice= ParkingPrice.getText();
-			ActualInitialParkingPrice=Parkingprice.substring(1);
-
+			ActualInitialParkingPrice = Parkingprice.substring(1);
+			
 			Thread.sleep(3000);
 			ActualParkingHour=ParkingHour.getText();
 			ActualParkingMin=ParkingMinute.getText();
@@ -418,12 +462,12 @@ public class SessionCreationPage {
 		try{
 			ApcoaListeners.logInfo("PaymentConfirmation start");
 
-			Thread.sleep(12000);
+			Thread.sleep(5000);
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,payAmount,30);
 			ApcoaListeners.logInfo("payAmount.getText(): "+payAmount.getText());
 			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,payAmount,15);
 
-			Thread.sleep(25000);
+			Thread.sleep(10000);
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,paySuccessMsg,100);
 			ActualPaymentSuccess=paySuccessMsg.getText();
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,closePayment,100);
@@ -455,20 +499,41 @@ public class SessionCreationPage {
 
 	public void ExtendSession(String Country){
 		try{
-			ApcoaListeners.logInfo("ExtendSession start");
+			ApcoaListeners.logInfo("Extend Session start");
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,ExtendSession,100);
 			ExtendSession.click();
 			Thread.sleep(8000);
-			if(Country.equalsIgnoreCase("Austria")){
-				action.press(PointOption.point(553, 1427)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(847, 1640)).release().perform();
-			}else if(Country.equalsIgnoreCase("Italy")){
-				action.press(PointOption.point(359, 853)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(538, 1151)).release().perform();	
-			}else if(Country.equalsIgnoreCase("Poland")){
-				action.press(PointOption.point(359, 853)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(532, 1157)).release().perform();
+			ApcoaListeners.logInfo("Extend Session Dialer Movement start:");
+			ApcoaListeners.logInfo("Country: " +Country);
+			if(AutomationConfiguration.Environment.equalsIgnoreCase("Production") && AutomationConfiguration.Tenant.equalsIgnoreCase("Apcoa")) {
+				action.press(PointOption.point(553, 1427)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(200))).moveTo(PointOption.point(602, 1444)).release().perform();
 			}else {
-				action.press(PointOption.point(359, 853)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(561, 1067)).release().perform();
+				if(Country.equalsIgnoreCase("Austria")){
+					dailerRotationControl(25);
+				}else if(Country.equalsIgnoreCase("India")){
+					dailerRotationControl(25);
+				}else if(Country.equalsIgnoreCase("New India")){
+					 dailerRotationControl(25);
+				}else if(Country.equalsIgnoreCase("Italy")){
+					dailerRotationControl(25);
+				}else if(Country.equalsIgnoreCase("Brazil")){
+					dailerRotationControl(100);
+				}else if(Country.equalsIgnoreCase("Australia")){
+					 dailerRotationControl(25);
+			    }else if(Country.equalsIgnoreCase("United States")){
+					dailerRotationControl(100);		
+				}else if(Country.equalsIgnoreCase("United States Elite")){
+					dailerRotationControl(50);		
+				}else if(Country.equalsIgnoreCase("Dubai")){
+	            	dailerRotationControl(100);
+	            }else if(Country.equalsIgnoreCase("Poland")){
+					dailerRotationControl(25);
+				}else {
+					dailerRotationControl(25);
+				}
 			}
-			Thread.sleep(10000);
+			ApcoaListeners.logInfo("Extend Session Dialer Movement ends:");
+			Thread.sleep(8000);
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,ParkingPrice,100);
 			Parkingprice= ParkingPrice.getText();
 			ActualExtendedParkingPrice=Parkingprice.substring(1);
@@ -521,15 +586,64 @@ public class SessionCreationPage {
 		}
 	}
 
-	public void StartsessionforParkingwithPass(){	
-		if(AutomationConfiguration.Tenant.equalsIgnoreCase("GMP")) {
+	public void StartsessionforParkingwithPass() throws InterruptedException{
+		ApcoaListeners.logInfo("StartsessionforParkingwithPass start");
+		if(AutomationConfiguration.Environment.equalsIgnoreCase("Production")) {
+			ApcoaListeners.logInfo("Scroll page starts");
+			Thread.sleep(5000);	
+			PageBuyPass.scrollPage();
+			ApcoaListeners.logInfo("Scroll page ends");
+		}
+		if(AutomationConfiguration.Tenant.equalsIgnoreCase("Elite")) {		
 			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,gmpstartsession,100);
-		}else if(AutomationConfiguration.Tenant.equalsIgnoreCase("Apcoa")) {
-			ApcoaListeners.logInfo("StartsessionforParkingwithPass start");
-			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,startSessionwithpass,100);
-			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,btnselectfirsttariff,100);
-			ApcoaListeners.logInfo("StartsessionforParkingwithPass end");
-		}		
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,tarrifSelection,100);
+		}
+		
+		else if(AutomationConfiguration.Tenant.equalsIgnoreCase("GMP")) {	
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,gmpstartsession,100);
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,gmptarrifSelection,100);
+		}else if(AutomationConfiguration.Tenant.equalsIgnoreCase("Apcoa")) {	
+			Thread.sleep(5000);
+			try {
+				CommonUtility.GenericMethods.explicitWaitForWebElement(driver,startSessionwithpass,100);
+			}catch(Exception e) {}
+			try {
+				CommonUtility.GenericMethods.explicitWaitForWebElement(driver,startSessionwithpass,30);
+			}catch(Exception e) {}
+			try {
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,btnselectfirsttariff,30);	
+			}catch(Exception e) {}
+		}else if(AutomationConfiguration.Tenant.equalsIgnoreCase("OneParking")) {
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,gmpstartsession,100);
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,oneParkingtarrifSelection,100);
+		}
+		else if(AutomationConfiguration.Tenant.equalsIgnoreCase("BAC")) {
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,gmpstartsession,100);
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,bactarrifSelection,100);
+	
+		}
+		else if(AutomationConfiguration.Tenant.equalsIgnoreCase("GarageInn")) {
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,gmpstartsession,100);
+		//	CommonUtility.GenericMethods.explicitWaitForWebElement(driver,tarrifSelection,100);
+	
+		}
+		else if(AutomationConfiguration.Tenant.equalsIgnoreCase("Reef")) {
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,gmpstartsession,100);
+		//	CommonUtility.GenericMethods.explicitWaitForWebElement(driver,tarrifSelection,100);
+	
+		}
+		else if(AutomationConfiguration.Tenant.equalsIgnoreCase("GreenParking")) {
+			
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,gmpstartsession,100);
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,btnParkNow,100);
+	
+		}
+		else if(AutomationConfiguration.Tenant.equalsIgnoreCase("Elite")) {
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,gmpstartsession,100);
+			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,elitetarrifSelection,100);
+	
+		}
+		ApcoaListeners.logInfo("StartsessionforParkingwithPass end");
 	}
 
 	public void StartSessionforParkingwithTariff(){
@@ -603,5 +717,31 @@ public class SessionCreationPage {
 				System.out.println("Auto checkout is successfull");
 			}
 		}
+	}
+	
+	public void dailerRotationControl(int perc) throws InterruptedException
+	{
+	  if(perc==25)
+	  {
+		  action.press(PointOption.point(553, 1427)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(849, 1646)).release().perform();
+		  Thread.sleep(2000);
+      }else if(perc==50)
+      {
+    	  dailerRotationControl(25);
+    	  action.press(PointOption.point(849, 1646)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(545, 1968)).release().perform();
+    	  Thread.sleep(2000);
+      }
+      else if(perc==75)
+      {
+    	  dailerRotationControl(50);
+    	  action.press(PointOption.point(545, 1968)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(206, 1643)).release().perform();
+    	  Thread.sleep(2000);
+      }
+      else if(perc==100)
+      {
+    	  dailerRotationControl(75);
+    	  action.press(PointOption.point(206, 1643)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000))).moveTo(PointOption.point(528, 1314)).release().perform();
+    	  Thread.sleep(2000);
+      }
 	}
 }

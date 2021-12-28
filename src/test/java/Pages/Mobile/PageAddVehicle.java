@@ -54,6 +54,7 @@ public class PageAddVehicle {
 	}
 	
 	public String getfirstvehiclelpr(){
+		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,txtfirstlpr,30);
 		return txtfirstlpr.getText();
 	}
 	
@@ -62,13 +63,13 @@ public class PageAddVehicle {
 		ApcoaListeners.logInfo("Going to delete Vehicle");
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,btnMenu,30);
 		btnMenu.click();
-		Thread.sleep(3000);
+		Thread.sleep(1000);
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,btnNavVehicle,30);
 		btnNavVehicle.click();
-		Thread.sleep(5000);
+		Thread.sleep(2000);
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,btnfirstlprdel,50);
 		btnfirstlprdel.click();
-		Thread.sleep(3000);
+		Thread.sleep(1000);
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,btnconfirmdel,50);
 		btnconfirmdel.click();
 		ApcoaListeners.logInfo("Delete Vehicle End");
@@ -77,22 +78,22 @@ public class PageAddVehicle {
 	public void addVehicle(String vehiclenumber) throws InterruptedException{
 	
 		ApcoaListeners.logInfo("Add Vehicle Start");
-		Thread.sleep(5000);
+		Thread.sleep(2000);
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,btnMenu,30);
 		btnMenu.click();
-		Thread.sleep(3000);
+		Thread.sleep(1000);
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,btnNavVehicle,30);
 		btnNavVehicle.click();
-		Thread.sleep(5000);
+		Thread.sleep(2000);
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,btnAddVehicle,30);
 		btnAddVehicle.click();
-		Thread.sleep(5000);
+		Thread.sleep(1000);
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,edtbxAddVehicle,30);
 		edtbxAddVehicle.sendKeys(vehiclenumber);
-		Thread.sleep(3000);
+		Thread.sleep(1000);
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,btnSaveVehicle,30);
 		btnSaveVehicle.click();
-		Thread.sleep(8000);
+		Thread.sleep(2000);
 		ApcoaListeners.logInfo("Add Vehicle End");
 	}
 	

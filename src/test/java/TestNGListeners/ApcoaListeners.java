@@ -38,12 +38,12 @@ public class ApcoaListeners extends CreateSession implements ITestListener{
 
 	ExtentReports extent = ExtentReporterNG.getReportObject();
 	ExtentTest test;
-	public static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>();
+	//public static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>();
 
 	public static void logInfo(String info){
 		System.out.println(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss  ").format(new Date()).toString() + info);
 		AutomationConfiguration.Log.info(info);
-		extentTest.get().log(Status.INFO, info); 
+		AutomationConfiguration.extentTest.get().log(Status.INFO, info); 
 	}
 	
 	public static void addScreenshotToReport(String msg) {
@@ -59,7 +59,7 @@ public class ApcoaListeners extends CreateSession implements ITestListener{
 			String filename = System.getProperty("user.dir").toString()+"/Output/Screenshot/"+ new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss'.jpg'").format(new Date()).toString();
 			File dest = new File( filename); 
 			FileUtils.copyFile(scr, dest);
-			extentTest.get().addScreenCaptureFromPath(dest.getAbsolutePath(), msg);
+			AutomationConfiguration.extentTest.get().addScreenCaptureFromPath(dest.getAbsolutePath(), msg);
 		}catch (Exception e){
 			logInfo("Error in TestNG Listner(taking screenshot on failure): "+e.toString());
 		} 	
@@ -83,7 +83,7 @@ public class ApcoaListeners extends CreateSession implements ITestListener{
 
 	public void onTestStart(ITestResult result) { 
 		test = extent.createTest(result.getMethod().getMethodName());
-		extentTest.set(test);
+		AutomationConfiguration.extentTest.set(test);
 		logInfo("New Test started: --> "+result.getMethod().getMethodName());
 	}
 
@@ -94,7 +94,7 @@ public class ApcoaListeners extends CreateSession implements ITestListener{
 	 */
 	public void onTestSuccess(ITestResult result) { 
 		logInfo("Test Passed: "+result.getMethod().getMethodName());
-		extentTest.get().log(Status.PASS, "Test Passed");
+		AutomationConfiguration.extentTest.get().log(Status.PASS, "Test Passed");
 		logInfo("Test end:(Success) --> "+result.getMethod().getMethodName());
 	}
 
@@ -106,14 +106,14 @@ public class ApcoaListeners extends CreateSession implements ITestListener{
 	@Override
 	public void onTestFailure(ITestResult result){ 
 		logInfo("Test end:(Fail) --> "+result.getMethod().getMethodName());
-		extentTest.get().log(Status.FAIL, " Reason for failure: "+result.getThrowable().toString());
+		AutomationConfiguration.extentTest.get().log(Status.FAIL, " Reason for failure: "+result.getThrowable().toString());
 		addScreenshotToReport(result.getMethod().getMethodName()+": "+result.getThrowable().toString());
 	}
 
 
 	public void onTestSkipped(ITestResult result){  
 		logInfo("Test skipped: "+result.getMethod().getMethodName());
-		extentTest.get().log(Status.SKIP, "Test Skipped");
+		AutomationConfiguration.extentTest.get().log(Status.SKIP, "Test Skipped");
 	}
 
 	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {   }

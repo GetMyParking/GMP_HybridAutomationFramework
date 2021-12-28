@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import CommonUtility.AutomationConfiguration;
+import TestNGListeners.ApcoaListeners;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
@@ -48,9 +49,20 @@ public class PageBuyPass {
 	
 	@AndroidFindBy(id="android:id/button1")
 	WebElement okButton;
+	// 602,1444
+		//com.apcoaflow.consumer:id/tv_add_discount
+		
+		//com.apcoaflow.consumer:id/et_promo_code sendkeys
+		
+		//com.apcoaflow.consumer:id/tv_apply_promo_code click
 	
+	//	
+	//com.apcoaflow.consumer:id/tv_positive_action_button
 	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/tv_add_promo_code')]")
 	WebElement addPromoLink;
+	
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/tv_add_discount')]")
+	WebElement addPromoDiscount;
 	
 	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/et_promo_code')]")
 	WebElement addPromoTextbox;
@@ -92,7 +104,25 @@ public class PageBuyPass {
 	((AndroidDriver) AutomationConfiguration.AppiumDriver).pressKey(new KeyEvent().withKey(AndroidKey.BACK));
 	}
 
-	public void scrollPage() {
+	public void applyPromoCode(String PromoCode) throws InterruptedException {
+		ApcoaListeners.logInfo("Going to apply promo code");
+		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,addPromoDiscount,30);
+		addPromoDiscount.click();
+		Thread.sleep(3000);
+		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,addPromoTextbox,30);
+		addPromoTextbox.sendKeys(PromoCode);
+		Thread.sleep(5000);
+		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,applyButton,50);
+		applyButton.click();
+		Thread.sleep(3000);
+		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,okGotItButton,50);
+		okGotItButton.click();
+		Thread.sleep(3000);
+		
+		ApcoaListeners.logInfo("Promo code End");
+	}
+	
+	public static void scrollPage() {
 		Dimension dimension = AutomationConfiguration.AppiumDriver.manage().window().getSize();
 		int start_x=(int)(dimension.width*0.5);
 		int start_y=(int)(dimension.height*0.8);

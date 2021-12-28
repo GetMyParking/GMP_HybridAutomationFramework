@@ -5,6 +5,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+
+import CommonUtility.AutomationConfiguration;
 import CommonUtility.GenericMethods;
 import TestNGListeners.ApcoaListeners;
 import io.appium.java_client.pagefactory.AndroidFindBy;
@@ -24,6 +26,10 @@ public class PageSelectCountry {
 	
 	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/tv_next')]")
 	WebElement nextbtn;
+	//	
+	//com.apcoaflow.consumer:id/footer_button_1
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/footer_button_1')]")
+	WebElement btnfooterok;
 	
 	public String CountrySelected = "";
 	
@@ -58,8 +64,13 @@ public class PageSelectCountry {
 		ApcoaListeners.logInfo("Clicked select_country button successfully");		
 	}
 	
-	public void btnLoginClick(){
+	public void btnLoginClick() throws InterruptedException{
 		ApcoaListeners.logInfo("Going to click Login button");
+		if(AutomationConfiguration.Environment.equalsIgnoreCase("Production")) {
+			Thread.sleep(2000);
+			btnfooterok.click();
+		}
+		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,btnLog,150);
 		btnLog.click();
 		try {
 			//CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,nextbtn,30);

@@ -108,15 +108,16 @@ public class GenericMethods {
         }
     }
     
-    public static void sendKeys(WebDriver driver, WebElement targetElement,String data,boolean ismandetory, int timeOut, String onFailureMessage){
+    public static void sendKeys(WebDriver driver, WebElement targetElement,String data, int timeOut,boolean ismandetory, String onFailureMessage){
     	try{
     		WebDriverWait wait = new WebDriverWait(driver, timeOut);
             wait.until(ExpectedConditions.visibilityOf(targetElement));
+            Thread.sleep(2000);
             targetElement.clear();
             targetElement.sendKeys(data);    
     	}catch(Exception e){
     		if(ismandetory){
-    			AutomationConfiguration.SoftAsserts.assertFalse(false, onFailureMessage);
+    			AutomationConfiguration.onFail(driver,onFailureMessage + " not found.");
     		}
     	}
     }
@@ -128,9 +129,19 @@ public class GenericMethods {
             targetElement.click(); 
     	}catch(Exception e){
     		if(ismandetory){
-    			AutomationConfiguration.SoftAsserts.assertFalse(false, onFailureMessage);
+    			AutomationConfiguration.onFail(driver,onFailureMessage+ " not found.");
     		}
     	}
+    }
+    
+    public static Boolean explicitWait(WebDriver driver, WebElement targetElement,int timeout) {
+    	try{
+            WebDriverWait wait = new WebDriverWait(driver, timeout);
+            wait.until(ExpectedConditions.visibilityOf(targetElement));   
+            return true;
+    	}catch (TimeoutException e){
+            return false;
+        }  
     }
     
     public static void explicitWaitForWebElementOnly(WebDriver driver, WebElement targetElement,int timeout) {

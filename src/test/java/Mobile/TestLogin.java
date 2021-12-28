@@ -88,19 +88,20 @@ public class TestLogin {
 	public void selectCountry() throws Exception{
 		Thread.sleep(2000);
 		PageSelectCountry selectcountry = new PageSelectCountry(AutomationConfiguration.AppiumDriver);
-		selectcountry.selectCountryClick();
-		Thread.sleep(2000);
-		selectcountry.selectCountry(AutomationConfiguration.Country);
-		Thread.sleep(5000);
-		selectcountry.btnLoginClick();
 		SoftAssert softAssert = new SoftAssert();
-		softAssert.assertEquals(AutomationConfiguration.Country.toUpperCase(), selectcountry.CountrySelected.toUpperCase(),"Country not selected" );
+		if(!AutomationConfiguration.Tenant.equalsIgnoreCase("Elite")) {
+			selectcountry.selectCountryClick();
+			Thread.sleep(2000);
+			selectcountry.selectCountry(AutomationConfiguration.Country);
+			softAssert.assertEquals(AutomationConfiguration.Country.toUpperCase(), selectcountry.CountrySelected.toUpperCase(),"Country not selected" );		
+		}
+		selectcountry.btnLoginClick();
 		softAssert.assertAll();
 	}
 
 	@Test(priority=2,dataProvider="getLoginData")
 	public void loginAppcoa(LoginMapper loginMapper) throws InterruptedException{
-		Thread.sleep(4000);
+		Thread.sleep(2000);
 		PageLogin login = new PageLogin(AutomationConfiguration.AppiumDriver);
 		login.enterCredentials(loginMapper.getEmail(), loginMapper.getPassword());
 		login.clickContinue();
@@ -108,19 +109,25 @@ public class TestLogin {
 		PageHomeApcoa home = new PageHomeApcoa(AutomationConfiguration.AppiumDriver);
 		home.acceptPushNotification();
 		home.checkUserName();
+		home.cancelActivatePopUp();
+		home.cancelQuestionPopUp();
+	
 
 		SoftAssert softAssert = new SoftAssert();
 		softAssert.assertEquals(loginMapper.getUsername().toUpperCase(),home.Username.toUpperCase() );
 		softAssert.assertAll();	
-	}
+	}//app = /Users/karankumaragarwal/Downloads/staging_1.0.60_100_apcoaflow_2021120212.apk
+
 
 	//@Test(priority=3,dataProvider="getVehicleData")
 	public void addVehicle(VehicleMapper vehicleMapper) throws InterruptedException{
+		PageHomeApcoa home = new PageHomeApcoa(AutomationConfiguration.AppiumDriver);
+		home.dismissFoodAlert();
 		String vehicleno = vehicleMapper.getLpr();
 		SoftAssert softAssert = new SoftAssert();
 		PageAddVehicle addvehicle = new PageAddVehicle(AutomationConfiguration.AppiumDriver);
 		addvehicle.addVehicle(vehicleno);
-		Thread.sleep(4000);
+		Thread.sleep(2000);
 		String vno = addvehicle.getfirstvehiclelpr();
 		softAssert.assertEquals(vehicleno, vno,"Vehicle LPR not added");
 		PageAddVehicle.goBack();
@@ -130,22 +137,25 @@ public class TestLogin {
 
 	//@Test(priority=5,dataProvider="getVehicleData")
 	public void deleteVehicle(VehicleMapper vehicleMapper) throws InterruptedException{
-		Thread.sleep(8000);
+		PageHomeApcoa home = new PageHomeApcoa(AutomationConfiguration.AppiumDriver);
+		home.dismissFoodAlert();
+		Thread.sleep(2000);
 		String vehicleno = vehicleMapper.getLpr();
 		SoftAssert softAssert = new SoftAssert();
 		PageAddVehicle delvehicle = new PageAddVehicle(AutomationConfiguration.AppiumDriver);
 		delvehicle.deletelpr();
-		Thread.sleep(5000);
+		Thread.sleep(2000);
 		String vno = delvehicle.getfirstvehiclelpr();
 		softAssert.assertNotEquals(vehicleno, vno,"Vehicle LPR not deleted");
 		PageAddVehicle.goBack();
 		softAssert.assertAll();
-		Thread.sleep(5000);
 	}
 	
 	@Test(priority = 4, dataProvider = "getParkingData")
 	public void startExtendStopSession(ParkingMapper parkingMapper) throws InterruptedException {
-		Thread.sleep(8000);
+		Thread.sleep(2000);
+		PageHomeApcoa home = new PageHomeApcoa(AutomationConfiguration.AppiumDriver);
+		home.dismissFoodAlert();
 		SessionCreationPage SC = new SessionCreationPage(AutomationConfiguration.AppiumDriver);
 		String country = AutomationConfiguration.Country;
 		SoftAssert softAssert = new SoftAssert();
@@ -153,8 +163,8 @@ public class TestLogin {
 		SessionUtils sessionUtils = new SessionUtils(SC, country, softAssert);
 		sessionUtils.startSession(parkingMapper);
 
-		float finalPrice = sessionUtils.extendSession();
-		sessionUtils.stopSession(finalPrice);
+		float finalPrice = sessionUtils.extendSession(parkingMapper);
+		sessionUtils.stopSession(finalPrice,parkingMapper);
 
 		softAssert.assertAll();
 		PageAddVehicle.goBack();

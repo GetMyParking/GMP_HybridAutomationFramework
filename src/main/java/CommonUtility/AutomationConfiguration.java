@@ -13,6 +13,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.asserts.SoftAssert;
+
+import com.aventstack.extentreports.ExtentTest;
+
 import io.appium.java_client.AppiumDriver;
 
 public class AutomationConfiguration {
@@ -44,7 +47,6 @@ public class AutomationConfiguration {
 	public static String Tenant;
 	public static String Environment;
 	public static String Country;
-	//public static final String Package ="com.apcoaflow.consumer.staging";
 	public static SoftAssert SoftAsserts;
 	public static String AppiumServerURL;
 	public static String URL;
@@ -53,10 +55,15 @@ public class AutomationConfiguration {
 	public static String LaunchMobileApp;
 	public static String ScreenshotFor;
 	public static String Platform;
+	public static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>();
 	
 	
 	public static void logInfo(String info){
 		System.out.println(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss  ").format(new Date()).toString() + info);
 		AutomationConfiguration.Log.info(info);
 	}	
+	public static void onFail(WebDriver d,String msg)
+	{
+		
+	}
 }

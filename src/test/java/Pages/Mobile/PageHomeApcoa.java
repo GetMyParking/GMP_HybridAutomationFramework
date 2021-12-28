@@ -21,18 +21,38 @@ public class PageHomeApcoa {
 	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/tv_name')]")
 	WebElement usernametxt;
 	
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/iv_order_dismiss')]")
+	WebElement btnDismissFoodAlert;
+	
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/ub_page_button_cancel')]")
+	WebElement cancelQuestionPopUpButton;  //to cancel question pop up 
+
+	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/iv_close_activation_reminder')]")
+	WebElement cancelActivatePopUpButton;  
+	
+	
 	public String Username="";
 	
 	public PageHomeApcoa(WebDriver driver){
 		this.driver = driver;
 		PageFactory.initElements(new AppiumFieldDecorator (driver), this);
 	}
-
+	
+	public void dismissFoodAlert(){	
+		try {
+		GenericMethods.explicitWaitForWebElementOnly(driver, btnDismissFoodAlert,25);
+		ApcoaListeners.logInfo("Going to click Food Alert ");
+		btnDismissFoodAlert.click();
+		ApcoaListeners.logInfo("Clicked Food alert button sucessfully.");
+		}catch(Exception e) {}
+	}
+	
 	public void acceptPushNotification(){	
 		GenericMethods.explicitWaitForWebElementOnly(driver, acceptPushNotificationBtn,100);
 		ApcoaListeners.logInfo("Going to click Accept Push Notification ");
 		acceptPushNotificationBtn.click();
 		ApcoaListeners.logInfo("Clicked Accept Push Notification button sucessfully.");
+		dismissFoodAlert();
 	}
 
 	public void checkUserName(){
@@ -42,5 +62,18 @@ public class PageHomeApcoa {
 		ApcoaListeners.logInfo("username is: "+ usernametxt.getText());
 		Username = usernametxt.getText();
 		PageAddVehicle.goBack();
+	}
+	public void cancelQuestionPopUp() {
+		try {
+			cancelQuestionPopUpButton.click();
+		}catch(Exception e) {}
+		
+	}
+	
+	public void cancelActivatePopUp() {
+		try {
+			cancelActivatePopUpButton.click();
+		}catch(Exception e) {}
+		
 	}
 }

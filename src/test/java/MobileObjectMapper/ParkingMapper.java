@@ -4,9 +4,19 @@ public class ParkingMapper {
 	
 	private String parkingname;
     private String parkingidentifier;
+    private String currencysymbol;
     
     public ParkingMapper(){}
 
+    public String getCurrencysymbol() {
+        return currencysymbol;
+    }
+
+    public void setCurrencysymbol(String currencysymbol) {
+        this.currencysymbol = currencysymbol;
+    }
+
+    
     public String getParkingname() {
         return parkingname;
     }
@@ -25,9 +35,10 @@ public class ParkingMapper {
 
     @Override
     public String toString() {
-        return "ParkingMapper{" +
+        return  "ParkingMapper{" +
                 "parkingname='" + parkingname + '\'' +
                 ", parkingidentifier='" + parkingidentifier + '\'' +
+                ", currencysymbol='" + currencysymbol + '\'' +  
                 '}';
     }
 }
