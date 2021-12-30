@@ -4,16 +4,16 @@ public class ParkingMapper {
 	
 	private String parkingname;
     private String parkingidentifier;
-    private String currencysymbol;
+    private String currency;
     
     public ParkingMapper(){}
 
     public String getCurrencysymbol() {
-        return currencysymbol;
+        return currency;
     }
 
-    public void setCurrencysymbol(String currencysymbol) {
-        this.currencysymbol = currencysymbol;
+    public void setCurrencysymbol(String currency) {
+        this.currency = currency;
     }
 
     
@@ -38,7 +38,7 @@ public class ParkingMapper {
         return  "ParkingMapper{" +
                 "parkingname='" + parkingname + '\'' +
                 ", parkingidentifier='" + parkingidentifier + '\'' +
-                ", currencysymbol='" + currencysymbol + '\'' +  
+                ", currencysymbol='" + currency+ '\'' +  
                 '}';
     }
 }

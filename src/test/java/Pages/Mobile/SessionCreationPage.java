@@ -7,6 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 import CommonUtility.AutomationConfiguration;
+import MobileObjectMapper.ParkingMapper;
 import TestNGListeners.ApcoaListeners;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.PerformsTouchActions;
@@ -391,7 +392,7 @@ public class SessionCreationPage {
 	
 	
 	
-	public void dialerMovement(String Country) {
+	public void dialerMovement(String Country, ParkingMapper parkingMapper) {
 		try{
 			ApcoaListeners.logInfo("Dialer Movement for start Session: start");
 			ApcoaListeners.logInfo("Country: "+Country);
@@ -434,7 +435,9 @@ public class SessionCreationPage {
 			}
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,ParkingPrice,30);
 			Parkingprice= ParkingPrice.getText();
-			ActualInitialParkingPrice = Parkingprice.substring(1);
+			String currency=parkingMapper.getCurrencysymbol();
+			int len=currency.length();
+			ActualInitialParkingPrice = Parkingprice.substring(len);
 			
 			Thread.sleep(3000);
 			ActualParkingHour=ParkingHour.getText();
@@ -497,7 +500,7 @@ public class SessionCreationPage {
 		}
 	}
 
-	public void ExtendSession(String Country){
+	public void ExtendSession(String Country, ParkingMapper parkingMapper){
 		try{
 			ApcoaListeners.logInfo("Extend Session start");
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,ExtendSession,100);
@@ -536,7 +539,11 @@ public class SessionCreationPage {
 			Thread.sleep(8000);
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,ParkingPrice,100);
 			Parkingprice= ParkingPrice.getText();
-			ActualExtendedParkingPrice=Parkingprice.substring(1);
+			//ActualExtendedParkingPrice=Parkingprice.substring(1);
+			String currency=parkingMapper.getCurrencysymbol();
+			int len=currency.length();
+			ActualExtendedParkingPrice=Parkingprice.substring(len);
+			
 			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,clickOnDialer,100);
 			ApcoaListeners.logInfo("ExtendSession end:Parkingprice " + Parkingprice );
 

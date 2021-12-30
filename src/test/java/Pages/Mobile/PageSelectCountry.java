@@ -66,10 +66,10 @@ public class PageSelectCountry {
 	
 	public void btnLoginClick() throws InterruptedException{
 		ApcoaListeners.logInfo("Going to click Login button");
-		if(AutomationConfiguration.Environment.equalsIgnoreCase("Production")) {
+		try{
 			Thread.sleep(2000);
 			btnfooterok.click();
-		}
+		}catch(Exception e) {}
 		CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,btnLog,150);
 		btnLog.click();
 		try {

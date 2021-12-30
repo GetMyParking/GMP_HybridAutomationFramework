@@ -24,7 +24,7 @@ public class SessionUtils {
         Thread.sleep(3000);
         this.SC.StartsessionforParkingwithPass();
         Thread.sleep(3000);
-        this.SC.dialerMovement(this.country);
+        this.SC.dialerMovement(this.country, parkingMapper);
 
         System.out.println("Main ActualInitialParkingPrice:" + this.SC.ActualInitialParkingPrice);//Main ActualInitialParkingPrice:1.14
         System.out.println("Main ActualParkingHour:" + this.SC.ActualParkingHour);//Main ActualParkingHour:00
@@ -45,7 +45,7 @@ public class SessionUtils {
     public float extendSession(ParkingMapper parkingMapper) throws InterruptedException {
     	String symbol;
     	String currency=parkingMapper.getCurrencysymbol();
-        this.SC.ExtendSession(this.country);
+        this.SC.ExtendSession(this.country,parkingMapper);
         float initialparkingprice = Float.parseFloat(this.SC.ActualInitialParkingPrice);
         //float initialparkinghours = Float.parseFloat(SC.ActualParkingHour);
         //float initialparkingminutes = Float.parseFloat(SC.ActualParkingMin);

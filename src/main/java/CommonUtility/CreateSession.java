@@ -90,6 +90,7 @@ public class CreateSession {
 			AutomationConfiguration.DesiredCap.setCapability("udid", AutomationConfiguration.PropertyFile.getProperty("udid").toString());
 			AutomationConfiguration.DesiredCap.setCapability("adbExecTimeout", 25000);
 			AutomationConfiguration.DesiredCap.setCapability("autoGrantPermissions", true);
+			AutomationConfiguration.DesiredCap.setCapability("autoGrantPermissions", true);
 			
 			AutomationConfiguration.AppiumServerURL = AutomationConfiguration.PropertyFile.getProperty("appiumserverurl").toString();
 			
