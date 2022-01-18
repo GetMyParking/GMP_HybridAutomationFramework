@@ -43,6 +43,7 @@ public class ExcelDriven {
 		try {
 			FileInputStream file = new FileInputStream(new File(path));
 			workbook = new XSSFWorkbook(file);
+			System.out.println(path);
 			int countofsheet = workbook.getNumberOfSheets();
 	        ArrayList<String> sheetname=new ArrayList<String>();
 	        for(int i=0;i<countofsheet;i++){
@@ -51,7 +52,7 @@ public class ExcelDriven {
 	        if(sheetname.contains(sheetName)){
 	     	  sheet= workbook.getSheet(sheetName);
 	        }else {
-	        	AutomationConfiguration.logInfo("Sheet Name not fount"); 	   
+	        	AutomationConfiguration.logInfo("Sheet Name not found"); 	   
 	        }
 		}catch(Exception e){
 			AutomationConfiguration.logInfo("Error in reading excel file."+ e.toString());

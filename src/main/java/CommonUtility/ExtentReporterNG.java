@@ -33,6 +33,7 @@ public class ExtentReporterNG {
 	public static ExtentReports getReportObject(){
 		String path = System.getProperty("user.dir").toString()+"/Output/Reports/"+"/ExtentReport" + new SimpleDateFormat("yyyy_MM_dd___hh_mm_ss'.html'").format(new Date()).toString();
 		ExtentSparkReporter reporter = new ExtentSparkReporter(path);
+		AutomationConfiguration.ExtentReportFilePath = path;
 		AutomationConfiguration.logInfo("Extent Report File path: "+path);
 		reporter.config().setReportName("GMP Automation Result");
 		reporter.config().setDocumentTitle("Automation");

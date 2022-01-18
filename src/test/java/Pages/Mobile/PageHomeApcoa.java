@@ -25,12 +25,11 @@ public class PageHomeApcoa {
 	WebElement btnDismissFoodAlert;
 	
 	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/ub_page_button_cancel')]")
-	WebElement cancelQuestionPopUpButton;  //to cancel question pop up 
+	WebElement cancelQuestionPopUpButton;  
 
 	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/iv_close_activation_reminder')]")
 	WebElement cancelActivatePopUpButton;  
-	
-	
+		
 	public String Username="";
 	
 	public PageHomeApcoa(WebDriver driver){

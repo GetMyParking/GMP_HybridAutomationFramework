@@ -29,24 +29,16 @@ public class AddPermitPage {
 	By displayname = By.xpath("//input[@id='displayName']");
 	By chequeno = By.xpath("//input[@id='chequeNo']");
 	
-	public AddPermitPage(WebDriver driver)
-	{
+	public AddPermitPage(WebDriver driver){
 		this.driver = driver;
 	}
 	
-	
-	
-	public void gotoPermit() throws InterruptedException
-	{
-		
+	public void gotoPermit() throws InterruptedException{
 		Thread.sleep(15000);
 		driver.findElement(clickpermit).click();
-		
-				
 	}
 	
-	public void gotoAddPermit() throws InterruptedException
-	{
+	public void gotoAddPermit() throws InterruptedException{
 		String carpark_name = "Get My Parking Office (old)";
 		String firstname_name = "testing";
 		String lastname_name = "permit";
@@ -76,9 +68,7 @@ public class AddPermitPage {
 		Thread.sleep(5000);
 		driver.findElement(carpermit).click();
 		Thread.sleep(4000);
-		//driver.findElement(By.xpath("//div[@title='permit_b']")).click();
 		driver.findElement(By.xpath("//li[contains(text(),'"+permitname+"')]")).click();
-		
 		
 		Thread.sleep(1000);
 		driver.findElement(firstname).sendKeys(firstname_name);
@@ -134,15 +124,9 @@ public class AddPermitPage {
 		driver.findElement(By.xpath("//a[@class='ant-calendar-today-btn ']")).click();
 		Thread.sleep(2000);
 		driver.findElement(By.xpath("//span[contains(text(), 'Collect Payment')]//parent::button")).click();
-		//Thread.sleep(2000);
-		//driver.findElement(By.xpath("//a[@href=\"/admin/permit\"]")).click();
-		//Thread.sleep(2000);
-		//driver.findElement(By.xpath("//div[contains(text(),'Permits')]"));
 	}
 	
-
-	public void clickContinue()
-	{
+	public void clickContinue(){
 		driver.findElement(btnLogin).click();
 	}
 }

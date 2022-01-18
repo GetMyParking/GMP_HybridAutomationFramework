@@ -134,7 +134,7 @@
 					<version>2.22.1</version>
 					<configuration>
 						<suiteXmlFiles>
-							<suiteXmlFile>AndroidMobileApcoa.xml</suiteXmlFile>
+							<suiteXmlFile>${xmlSuiteFileName}</suiteXmlFile>
 						</suiteXmlFiles>
 					</configuration>
 				</plugin>

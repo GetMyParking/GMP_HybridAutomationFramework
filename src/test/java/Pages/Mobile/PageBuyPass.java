@@ -49,15 +49,7 @@ public class PageBuyPass {
 	
 	@AndroidFindBy(id="android:id/button1")
 	WebElement okButton;
-	// 602,1444
-		//com.apcoaflow.consumer:id/tv_add_discount
-		
-		//com.apcoaflow.consumer:id/et_promo_code sendkeys
-		
-		//com.apcoaflow.consumer:id/tv_apply_promo_code click
 	
-	//	
-	//com.apcoaflow.consumer:id/tv_positive_action_button
 	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/tv_add_promo_code')]")
 	WebElement addPromoLink;
 	
@@ -161,7 +153,7 @@ public class PageBuyPass {
 		Thread.sleep(2500);
 		carparkName.click();
 		Thread.sleep(2500);
-		returnPreviousPage(); //return to previous page
+		returnPreviousPage();
 		Thread.sleep(2500);
 		scrollPage();
 		Thread.sleep(2500);

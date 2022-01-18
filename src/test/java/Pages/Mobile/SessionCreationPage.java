@@ -279,7 +279,6 @@ public class SessionCreationPage {
 			System.out.println("Active Session cost : "+ ActiveSessionCost);
 		}catch(Exception e){
 			System.out.println("PaymentConfirmation end error: "+e.toString());
-
 		}
 	}
 
@@ -386,11 +385,7 @@ public class SessionCreationPage {
 		}catch(Exception e) {
 			e.printStackTrace(); 
 		}
-
 	}
-
-	
-	
 	
 	public void dialerMovement(String Country, ParkingMapper parkingMapper) {
 		try{
@@ -435,7 +430,7 @@ public class SessionCreationPage {
 			}
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,ParkingPrice,30);
 			Parkingprice= ParkingPrice.getText();
-			String currency=parkingMapper.getCurrencysymbol();
+			String currency=parkingMapper.getCurrency();
 			int len=currency.length();
 			ActualInitialParkingPrice = Parkingprice.substring(len);
 			
@@ -540,7 +535,7 @@ public class SessionCreationPage {
 			CommonUtility.GenericMethods.explicitWaitForWebElementOnly(driver,ParkingPrice,100);
 			Parkingprice= ParkingPrice.getText();
 			//ActualExtendedParkingPrice=Parkingprice.substring(1);
-			String currency=parkingMapper.getCurrencysymbol();
+			String currency=parkingMapper.getCurrency();
 			int len=currency.length();
 			ActualExtendedParkingPrice=Parkingprice.substring(len);
 			
@@ -604,9 +599,7 @@ public class SessionCreationPage {
 		if(AutomationConfiguration.Tenant.equalsIgnoreCase("Elite")) {		
 			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,gmpstartsession,100);
 			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,tarrifSelection,100);
-		}
-		
-		else if(AutomationConfiguration.Tenant.equalsIgnoreCase("GMP")) {	
+		}else if(AutomationConfiguration.Tenant.equalsIgnoreCase("GMP")) {	
 			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,gmpstartsession,100);
 			CommonUtility.GenericMethods.explicitWaitForWebElement(driver,gmptarrifSelection,100);
 		}else if(AutomationConfiguration.Tenant.equalsIgnoreCase("Apcoa")) {	

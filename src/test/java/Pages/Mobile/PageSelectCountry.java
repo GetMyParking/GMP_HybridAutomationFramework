@@ -5,8 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-
-import CommonUtility.AutomationConfiguration;
 import CommonUtility.GenericMethods;
 import TestNGListeners.ApcoaListeners;
 import io.appium.java_client.pagefactory.AndroidFindBy;
@@ -18,6 +16,9 @@ public class PageSelectCountry {
 	
 	By selectCountryName = By.className("android.widget.TextView");
 	
+	@AndroidFindBy(className="android.widget.TextView")
+	List<WebElement> selectCountryButton1;
+	
 	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/text')]")
 	WebElement selectCountryButton;
 	
@@ -26,8 +27,7 @@ public class PageSelectCountry {
 	
 	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/tv_next')]")
 	WebElement nextbtn;
-	//	
-	//com.apcoaflow.consumer:id/footer_button_1
+	
 	@AndroidFindBy(xpath="//*[contains(@resource-id,':id/footer_button_1')]")
 	WebElement btnfooterok;
 	

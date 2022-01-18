@@ -90,11 +90,17 @@ public class CreateSession {
 			AutomationConfiguration.DesiredCap.setCapability("udid", AutomationConfiguration.PropertyFile.getProperty("udid").toString());
 			AutomationConfiguration.DesiredCap.setCapability("adbExecTimeout", 25000);
 			AutomationConfiguration.DesiredCap.setCapability("autoGrantPermissions", true);
-			AutomationConfiguration.DesiredCap.setCapability("autoGrantPermissions", true);
 			
 			AutomationConfiguration.AppiumServerURL = AutomationConfiguration.PropertyFile.getProperty("appiumserverurl").toString();
-			
-			AutomationConfiguration.AppiumDriver = new AndroidDriver<>(new URL(AutomationConfiguration.AppiumServerURL), AutomationConfiguration.DesiredCap);
+			for(int i=0;i<5;i++) {
+				try {
+					AutomationConfiguration.AppiumDriver = new AndroidDriver<>(new URL(AutomationConfiguration.AppiumServerURL), AutomationConfiguration.DesiredCap);
+					break;
+				}catch(Exception e) {
+					AutomationConfiguration.DesiredCap.setCapability("appWaitDuration",Integer.parseInt((String) AutomationConfiguration.DesiredCap.getCapability("appWaitDuration"))+3000);
+					Thread.sleep(3000);
+				}
+			}
 			AutomationConfiguration.AppiumDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 			AutomationConfiguration.logInfo("Successfully launched android app");	
 		}catch(Exception e){
@@ -125,22 +131,16 @@ public class CreateSession {
 					AutomationConfiguration.Driver = new ChromeDriver();
 					AutomationConfiguration.Driver.manage().window().maximize();
 					AutomationConfiguration.logInfo("Sucessfully launched Chrome Browser");
-					AutomationConfiguration.Driver.get(AutomationConfiguration.URL);
-					AutomationConfiguration.logInfo("Successfully navigate to URL: "+ AutomationConfiguration.URL);	
 			}else if (AutomationConfiguration.BrowserName.toUpperCase().equals("FIREFOX")){
 				AutomationConfiguration.logInfo("Launching Firefox browser");
 				WebDriverManager.firefoxdriver().setup();
 				AutomationConfiguration.Driver.manage().window().maximize();
 				AutomationConfiguration.logInfo("Sucessfully launched Firefox Browser");
-				AutomationConfiguration.Driver.get(AutomationConfiguration.URL);
-				AutomationConfiguration.logInfo("Successfully navigate to URL: "+ AutomationConfiguration.URL);	
 			}else if (AutomationConfiguration.BrowserName.toUpperCase().equals("IE")){
 				AutomationConfiguration.logInfo("Launching Internet Explorer browser");
 				WebDriverManager.iedriver().setup();
 				AutomationConfiguration.Driver.manage().window().maximize();
 				AutomationConfiguration.logInfo("Sucessfully launched Internet Explorer Browser");
-				AutomationConfiguration.Driver.get(AutomationConfiguration.URL);
-				AutomationConfiguration.logInfo("Successfully navigate to URL: "+ AutomationConfiguration.URL);	
 			}else{
 				AutomationConfiguration.logInfo("Invalid browser type. Cannot launch.");
 			}

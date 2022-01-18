@@ -10,24 +10,16 @@ public class HomePage {
 	By btnLogin = By.id("com.apcoaflow.consumer.staging:id/btn_continue");
 	By clickpermit = By.xpath("//a[@href=('/admin/permit')]");
 	
-	public HomePage(WebDriver driver)
-	{
+	public HomePage(WebDriver driver){
 		this.driver = driver;
 	}
 	
-	
-	
-	public void gotoPermit() throws InterruptedException
-	{
-		
+	public void gotoPermit() throws InterruptedException{
 		Thread.sleep(15000);
-		driver.findElement(clickpermit).click();
-		
-				
+		driver.findElement(clickpermit).click();				
 	}
 
-	public void clickContinue()
-	{
+	public void clickContinue(){
 		driver.findElement(btnLogin).click();
 	}
 }

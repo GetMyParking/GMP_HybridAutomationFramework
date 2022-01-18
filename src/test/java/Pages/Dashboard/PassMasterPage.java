@@ -10,24 +10,16 @@ public class PassMasterPage {
 	By btnLogin = By.id("com.apcoaflow.consumer.staging:id/btn_continue");
 	By clickpassmaster = By.xpath("//a[@href='/admin/pass-master']");
 	
-	public PassMasterPage(WebDriver driver)
-	{
+	public PassMasterPage(WebDriver driver){
 		this.driver = driver;
 	}
-	
-	
-	
-	public void gotoPassmaster() throws InterruptedException
-	{
 		
+	public void gotoPassmaster() throws InterruptedException{	
 		Thread.sleep(10000);
-		driver.findElement(clickpassmaster).click();
-		
-				
+		driver.findElement(clickpassmaster).click();				
 	}
 
-	public void clickContinue()
-	{
+	public void clickContinue(){
 		driver.findElement(btnLogin).click();
 	}
 }

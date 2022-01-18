@@ -1,13 +1,11 @@
 package Mobile;
 
 import java.io.IOException;
-import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import CommonUtility.AutomationConfiguration;
 import CommonUtility.CreateSession;
@@ -25,11 +23,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestLogin {
 
-	WebDriver driver;
-
 	@Parameters({ "Environment", "Country","Tenant","Platform" })
 	@BeforeSuite
 	public void initializeDriver(String ennv, String country,String tenant, String platform) throws IOException{
+		String msg = System.getProperty("xmlSuiteFileName");
+		System.out.println("inside java code: "+msg);
+		System.out.println("inside java code: "+System.getProperty("myown"));
+		System.err.close();
+		System.setErr(System.out);
 		AutomationConfiguration.Tenant = tenant;
 		AutomationConfiguration.Environment = ennv;
 		AutomationConfiguration.Country = country;
@@ -65,7 +66,8 @@ public class TestLogin {
 	public ParkingMapper[] getParkingData() throws Exception{
 		String excelfilepath = System.getProperty("user.dir") + "/src/test/java/resources/"+AutomationConfiguration.Tenant+"Dataset.xlsx";
 		ExcelDriven.readExcelFile(excelfilepath, AutomationConfiguration.Environment);
-		String data = ExcelDriven.readDataRowandColumn(AutomationConfiguration.Environment,AutomationConfiguration.Country,"Session");		
+		String data = ExcelDriven.readDataRowandColumn(AutomationConfiguration.Environment,AutomationConfiguration.Country,"Session");	
+		System.out.println("Data get from excel: "+ data);
 		ObjectMapper mapper = new ObjectMapper();
 		ParkingMapper []parking = new ParkingMapper[1];
 		parking[0] = mapper.readValue(data, ParkingMapper.class);
@@ -84,7 +86,7 @@ public class TestLogin {
 		AutomationConfiguration.SoftAsserts.assertAll();;
 	}
 
-	@Test(priority=1)
+	//@Test(priority=1)
 	public void selectCountry() throws Exception{
 		Thread.sleep(2000);
 		PageSelectCountry selectcountry = new PageSelectCountry(AutomationConfiguration.AppiumDriver);
@@ -99,7 +101,7 @@ public class TestLogin {
 		softAssert.assertAll();
 	}
 
-	@Test(priority=2,dataProvider="getLoginData")
+	//@Test(priority=2,dataProvider="getLoginData")
 	public void loginAppcoa(LoginMapper loginMapper) throws InterruptedException{
 		Thread.sleep(2000);
 		PageLogin login = new PageLogin(AutomationConfiguration.AppiumDriver);
@@ -110,14 +112,12 @@ public class TestLogin {
 		home.acceptPushNotification();
 		home.checkUserName();
 		home.cancelActivatePopUp();
-		home.cancelQuestionPopUp();
-	
+		home.cancelQuestionPopUp();	
 
 		SoftAssert softAssert = new SoftAssert();
 		softAssert.assertEquals(loginMapper.getUsername().toUpperCase(),home.Username.toUpperCase() );
 		softAssert.assertAll();	
-	}//app = /Users/karankumaragarwal/Downloads/staging_1.0.60_100_apcoaflow_2021120212.apk
-
+	}
 
 	//@Test(priority=3,dataProvider="getVehicleData")
 	public void addVehicle(VehicleMapper vehicleMapper) throws InterruptedException{
@@ -151,7 +151,7 @@ public class TestLogin {
 		softAssert.assertAll();
 	}
 	
-	@Test(priority = 4, dataProvider = "getParkingData")
+	//@Test(priority = 4, dataProvider = "getParkingData")
 	public void startExtendStopSession(ParkingMapper parkingMapper) throws InterruptedException {
 		Thread.sleep(2000);
 		PageHomeApcoa home = new PageHomeApcoa(AutomationConfiguration.AppiumDriver);

@@ -12,34 +12,22 @@ public class PermitTabPage {
 	By clickpermit = By.xpath("//a[@href=('/admin/permit')]");
 	By clicktab_permit = By.xpath("//div[contains(text(),'Permits')]");
 	
-	public PermitTabPage(WebDriver driver)
-	{
+	public PermitTabPage(WebDriver driver){
 		this.driver = driver;
 	}
 	
 
-	public void gotoPermit() throws InterruptedException
-	{
-		
+	public void gotoPermit() throws InterruptedException{
 		Thread.sleep(15000);
-		driver.findElement(clickpermit).click();
-		
-				
+		driver.findElement(clickpermit).click();				
 	}
 	
-	public void gotoPermittab() throws InterruptedException
-	{
-		
+	public void gotoPermittab() throws InterruptedException{
 		Thread.sleep(10000);
-		driver.findElement(clicktab_permit).click();
-		
-				
+		driver.findElement(clicktab_permit).click();			
 	}
-	
-	
 
-	public void clickContinue()
-	{
+	public void clickContinue(){
 		driver.findElement(btnLogin).click();
 	}
 }

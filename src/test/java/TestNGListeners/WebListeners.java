@@ -39,11 +39,12 @@ import CommonUtility.ExtentReporterNG;
 
  */
 
-public class ApcoaListeners extends CreateSession implements ITestListener{
+public class WebListeners extends CreateSession implements ITestListener{
 
 	ExtentReports extent = ExtentReporterNG.getReportObject();
 	static ExtentTest test;
-	
+	//public static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>();
+
 	public static void logInfo(String info){
 		System.out.println(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss  ").format(new Date()).toString() + info);
 		AutomationConfiguration.Log.info(info);
@@ -92,9 +93,9 @@ public class ApcoaListeners extends CreateSession implements ITestListener{
 	 */
 
 	public void onTestStart(ITestResult result) { 
-		test = extent.createTest(result.getMethod().getMethodName().toUpperCase()+" ("+AutomationConfiguration.Country+")");
+		test = extent.createTest(result.getMethod().getMethodName());
 		AutomationConfiguration.extentTest.set(test);
-		logInfo("New Test started: --> "+result.getMethod().getMethodName()+" ("+AutomationConfiguration.Country+")");
+		logInfo("New Test started: --> "+result.getMethod().getMethodName());
 	}
 
 	/**
@@ -104,7 +105,7 @@ public class ApcoaListeners extends CreateSession implements ITestListener{
 	 */
 	public void onTestSuccess(ITestResult result) { 
 		AutomationConfiguration.extentTest.get().log(Status.PASS, "Test Passed");
-		logInfo("Test end:(Success) --> "+result.getMethod().getMethodName()+" ("+AutomationConfiguration.Country+")");
+		logInfo("Test end:(Success) --> "+result.getMethod().getMethodName());
 	}
 
 	/**
@@ -114,14 +115,14 @@ public class ApcoaListeners extends CreateSession implements ITestListener{
 	 */
 	@Override
 	public void onTestFailure(ITestResult result){ 
-		logInfo("Test end:(Fail) --> "+result.getMethod().getMethodName()+" ("+AutomationConfiguration.Country+")");
+		logInfo("Test end:(Fail) --> "+result.getMethod().getMethodName());
 		AutomationConfiguration.extentTest.get().log(Status.FAIL, " Reason for failure: "+result.getThrowable().toString());
 		addScreenshotToReport(result.getMethod().getMethodName()+": "+result.getThrowable().toString());
 	}
 
 
 	public void onTestSkipped(ITestResult result){  
-		logInfo("Test skipped: "+result.getMethod().getMethodName()+" ("+AutomationConfiguration.Country+")");
+		logInfo("Test skipped: "+result.getMethod().getMethodName());
 		AutomationConfiguration.extentTest.get().log(Status.SKIP, "Test Skipped");
 	}
 
