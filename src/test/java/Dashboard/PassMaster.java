@@ -8,30 +8,29 @@ import org.testng.annotations.Test;
 import CommonUtility.AutomationConfiguration;
 import CommonUtility.CreateSession;
 import Pages.Dashboard.PageLogin;
+import Pages.Dashboard.PassMasterPage;
 
 public class PassMaster {
 	
 	WebDriver driver;
 	
+	@BeforeSuite 
+	public void lauchweb() throws IOException{
+		CreateSession.readConfigFile("/src/test/java/resources/configDashboard.properties");
+	}
+	
 	@Test(priority=1)
-	public void login() throws InterruptedException
-	{
+	public void login() throws InterruptedException{
 		PageLogin dl = PageFactory.initElements(AutomationConfiguration.Driver, PageLogin.class);
 		dl.enterCredentials("dashboard_user", "dashboard_user");
 		dl.clickLoginBtn();
 	}
 
 	@Test(priority=2)
-	public void clickpassmaster() throws InterruptedException
-	{
-		Pages.Dashboard.PassMasterPage pm = PageFactory.initElements(AutomationConfiguration.Driver, Pages.Dashboard.PassMasterPage.class);
+	public void clickpassmaster() throws InterruptedException{
+		PassMasterPage pm = PageFactory.initElements(AutomationConfiguration.Driver, PassMasterPage.class);
 		pm.gotoPassmaster();
 	}
-		
-	@BeforeSuite 
-	public void lauchweb() throws IOException
-	{
-		CreateSession.readConfigFile("/src/test/java/resources/configDashboard.properties");
-	}
+	
 	
 }	

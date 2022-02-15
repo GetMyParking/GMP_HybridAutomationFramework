@@ -6,6 +6,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import CommonUtility.AutomationConfiguration;
 import CommonUtility.CreateSession;
@@ -86,7 +87,7 @@ public class TestLogin {
 		AutomationConfiguration.SoftAsserts.assertAll();;
 	}
 
-	//@Test(priority=1)
+	@Test(priority=1)
 	public void selectCountry() throws Exception{
 		Thread.sleep(2000);
 		PageSelectCountry selectcountry = new PageSelectCountry(AutomationConfiguration.AppiumDriver);

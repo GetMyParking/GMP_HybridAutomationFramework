@@ -69,6 +69,7 @@ public class WebListeners extends CreateSession implements ITestListener{
 			logInfo("Error in TestNG Listner(taking screenshot on failure): "+e.toString());
 		} 	
 	}
+	
 	/**
 	 * method to Log the Test Finish in Reports
 	 *

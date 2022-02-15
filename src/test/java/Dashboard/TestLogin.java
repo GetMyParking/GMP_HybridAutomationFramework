@@ -15,8 +15,7 @@ public class TestLogin {
 	WebDriver driver;
 	
 	@Test
-	public void login() throws InterruptedException
-	{
+	public void login() throws InterruptedException{
 		PageLogin dl = PageFactory.initElements(AutomationConfiguration.Driver, PageLogin.class);
 		dl.enterCredentials("dashboard_user", "dashboard_user");
 		dl.clickLoginBtn();
@@ -24,8 +23,7 @@ public class TestLogin {
 	
 	
 	@BeforeMethod
-	public void lauchweb() throws IOException
-	{
+	public void lauchweb() throws IOException{
 		CreateSession.readConfigFile("/src/test/java/resources/configDashboard.properties");
 	}
 

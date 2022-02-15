@@ -18,10 +18,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -33,6 +36,7 @@ public class CreateSession {
 	
 	/**
      * method to read the Config File and launch drivers according to configuration
+	 * @throws InterruptedException 
      *
      */
 	public static void readConfigFile(String path) throws IOException{
@@ -107,14 +111,33 @@ public class CreateSession {
 			AutomationConfiguration.logInfo("Error in launching android app. Exception: "+e.toString());
 		}
 	}
-	
+	public static void main(String[] args) throws MalformedURLException, InterruptedException {
+		launchiOSDriver();
+	}
 	/**
      * method to launch the IOS driver
      *
      *@param capabilities to give the desiredcapabilities
+	 * @throws InterruptedException 
      */
-	public synchronized static void launchiOSDriver() throws MalformedURLException {		
-		//appiumDriver  = new IOSDriver( new URL(appiumServerURL), capabilities);
+	public synchronized static void launchiOSDriver() throws MalformedURLException {
+		AutomationConfiguration.DesiredCap = new DesiredCapabilities();
+		AutomationConfiguration.DesiredCap.setCapability("udid", "7FF3FEC3-BA90-4BAC-AFAC-2D2448384AA6");
+		AutomationConfiguration.DesiredCap.setCapability("deviceName", "IPhone 11");
+		AutomationConfiguration.DesiredCap.setCapability("platformName", "IOS");
+		AutomationConfiguration.DesiredCap.setCapability("app","/Users/karankumaragarwal/Downloads/APCOA FLOW.app");
+		AutomationConfiguration.DesiredCap.setCapability("automationName", "XCUITest");
+		
+		AutomationConfiguration.AppiumDriver  = new IOSDriver( new URL("http://127.0.0.1:4723/wd/hub"), AutomationConfiguration.DesiredCap);
+		try {
+		Thread.sleep(8000);
+		}catch(Exception e) {}
+		AutomationConfiguration.AppiumDriver.findElement(By.xpath("//XCUIElementTypeTextField")).click();
+		try {
+			Thread.sleep(2000);
+			}catch(Exception e) {}
+			System.out.println(AutomationConfiguration.AppiumDriver.findElement(By.xpath("//XCUIElementTypePickerWheel")).getText());
+			AutomationConfiguration.AppiumDriver.findElement(By.xpath("//XCUIElementTypePickerWheel")).sendKeys("Sweden");
 	}
 
 	/**
