@@ -9,8 +9,6 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import CommonUtility.AutomationConfiguration;
 import CommonUtility.CreateSession;
 import Pages.Permit.ActivePermit;
 import Pages.Permit.BuyPermit;
@@ -38,7 +36,7 @@ public class Smoke {
 	@Test
 	public void loginTestPOM() {
 
-		driver = AutomationConfiguration.Driver;
+		driver = CreateSession.getAutomationConfiguration().Driver;
 		LoginPage loginPage = new LoginPage(driver);
 
 		loginPage.setUserCredentials(useremail,password);
@@ -81,10 +79,11 @@ public class Smoke {
 
 	@BeforeMethod
 	public void setup() throws IOException {
-		CreateSession.readConfigFile("/src/test/java/resources/configPermit.properties");
-		AutomationConfiguration.Driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);     
-		AutomationConfiguration.Driver.findElement(By.cssSelector("button[aria-label='menu']")).click();
-		AutomationConfiguration.Driver.findElement(By.linkText("Login")).click();
+		CreateSession cs = new CreateSession();
+		cs.readConfigFile("/src/test/java/resources/configPermit.properties","");
+		CreateSession.getAutomationConfiguration().Driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);     
+		CreateSession.getAutomationConfiguration().Driver.findElement(By.cssSelector("button[aria-label='menu']")).click();
+		CreateSession.getAutomationConfiguration().Driver.findElement(By.linkText("Login")).click();
 	}
 
 	@AfterMethod

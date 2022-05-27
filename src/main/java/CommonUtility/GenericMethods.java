@@ -9,13 +9,18 @@ Purpose /Description: Common methods for the both selenium
 	app using appium and on web app using selenium.
 -------------------------------------------------------------
 
-*/
+ */
 
 package CommonUtility;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.imageio.ImageIO;
+
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
@@ -27,154 +32,211 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.offset.PointOption;
+
 /**
  * Common methods for the selenium and appium
 
  */
 public class GenericMethods {
-	
+
 	public GenericMethods(WebDriver driver) {
-    }
-	
+	}
+
+
+	public static String elementScreenshot(WebElement element){
+		String filename = "";
+		try{
+			File scr = ((TakesScreenshot)element).getScreenshotAs(OutputType.FILE);		
+			filename = System.getProperty("user.dir").toString()+"/Output/Screenshot/"+ new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss'.jpg'").format(new Date()).toString();
+			File dest = new File( filename); 
+			FileUtils.copyFile(scr, dest);
+		} catch (IOException e) {
+			System.out.println("Error in getting Specific Element Screenshot: "+e.toString());
+		}
+		return filename;
+	}
+
+
+	public static String handlePrice(String price) {
+		price = price.replace((char)160,' ');
+		price = price.replaceAll("\\uFEFF", "");
+		price = price.replaceAll("\\s", "");
+		price = price.replaceAll(" ", "");
+		price = price.replaceAll(",", "");
+		price = price.trim();
+		return price;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static void tapByElement(AppiumDriver<WebElement> driver, WebElement element) {
+		try {
+			int startX = element.getLocation().getX();
+			int addition = (int) (element.getSize().height * 0.5);
+			int endX = startX + addition;
+			int startY = element.getLocation().getY();
+			new TouchAction(driver).tap(PointOption.point(endX, startY)).perform();
+		}catch(Exception e) {
+			//System.out.println("Error in tapByElement: "+e.toString());
+		}
+
+	} 
+
 	/**
-     * method to takescreenshot and return the path of the image file
-     *
-     *@param driver to take the driver from where to take screenshot
-     */
+	 * method to takescreenshot and return the path of the image file
+	 *
+	 *@param driver to take the driver from where to take screenshot
+	 */
 	public static String takeScreenShotFortheException(WebDriver driver) throws IOException {
-        Date date = new Date();
-        long time = date.getTime();
-        File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        String currenDir = System.getProperty("user.dir" + "/Output/Screenshot/screenshot" + time + ".png");
-        FileUtils.copyFile(scrFile, new File(currenDir));
-        return currenDir;
-    }
+		Date date = new Date();
+		long time = date.getTime();
+		File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		String currenDir = System.getProperty("user.dir" + "/Output/Screenshot/screenshot" + time + ".png");
+		FileUtils.copyFile(scrFile, new File(currenDir));
+		return currenDir;
+	}
 
 	/**
-     * method to define the explicit wait
-     *
-     *@param driver to define the driver
-     *@param element to apply the explicit wait
-     */
-    public static void explicitWait(WebDriver driver, By targetElement,int timeOut){
-    	try{
-            WebDriverWait wait = new WebDriverWait(driver, timeOut);
-            wait.until(ExpectedConditions.visibilityOfElementLocated(targetElement));
-        }catch (TimeoutException e){
-            System.out.println(e.getMessage());
-            throw e;
-        }
-    }
-    
-    
-    public static void waitAndClick(WebDriver driver, WebElement targetElement,int timeOut) {
-    	try{
-            WebDriverWait wait = new WebDriverWait(driver, timeOut);
-            wait.until(ExpectedConditions.visibilityOf(targetElement));
-            if(targetElement.isDisplayed()){
-            	targetElement.click();
-	  	    }
-    	}catch (TimeoutException e) {
-            System.out.println(e.getMessage());
-            throw e;
-        }
-    }
-    
-    public static void waitAndSendkeys(WebDriver driver, WebElement targetElement,String input,int timeOut){
-    	try{
-            WebDriverWait wait = new WebDriverWait(driver, timeOut);
-            wait.until(ExpectedConditions.visibilityOf(targetElement));
-            if(targetElement.isDisplayed()){
-            	targetElement.sendKeys(input);
-	  	    }else{
-            	//fail
-            }
-    	}catch (TimeoutException e) {
-            System.out.println(e.getMessage());
-            throw e;
-        }
-    }
-    
-    public static void explicitWaitForWebElement(WebDriver driver, WebElement targetElement,int timeOut) {
-    	try{
-            WebDriverWait wait = new WebDriverWait(driver, timeOut);
-            wait.until(ExpectedConditions.visibilityOf(targetElement));
-            if(targetElement.isDisplayed()){
-            	targetElement.click();
-	  	    }
-    	}catch (TimeoutException e){
-            System.out.println(e.getMessage());
-            throw e;
-        }
-    }
-    
-    public static void sendKeys(WebDriver driver, WebElement targetElement,String data, int timeOut,boolean ismandetory, String onFailureMessage){
-    	try{
-    		WebDriverWait wait = new WebDriverWait(driver, timeOut);
-            wait.until(ExpectedConditions.visibilityOf(targetElement));
-            Thread.sleep(2000);
-            targetElement.clear();
-            targetElement.sendKeys(data);    
-    	}catch(Exception e){
-    		if(ismandetory){
-    			AutomationConfiguration.onFail(driver,onFailureMessage + " not found.");
-    		}
-    	}
-    }
-     
-    public static void click(WebDriver driver, WebElement targetElement,boolean ismandetory, int timeOut, String onFailureMessage){
-    	try{
-    		WebDriverWait wait = new WebDriverWait(driver, timeOut);
-            wait.until(ExpectedConditions.visibilityOf(targetElement));
-            targetElement.click(); 
-    	}catch(Exception e){
-    		if(ismandetory){
-    			AutomationConfiguration.onFail(driver,onFailureMessage+ " not found.");
-    		}
-    	}
-    }
-    
-    public static Boolean explicitWait(WebDriver driver, WebElement targetElement,int timeout) {
-    	try{
-            WebDriverWait wait = new WebDriverWait(driver, timeout);
-            wait.until(ExpectedConditions.visibilityOf(targetElement));   
-            return true;
-    	}catch (TimeoutException e){
-            return false;
-        }  
-    }
-    
-    public static void explicitWaitForWebElementOnly(WebDriver driver, WebElement targetElement,int timeout) {
-    	try{
-            WebDriverWait wait = new WebDriverWait(driver, timeout);
-            wait.until(ExpectedConditions.visibilityOf(targetElement));   
-    	}catch (TimeoutException e){
-            throw e;
-        }  
-    }
+	 * method to define the explicit wait
+	 *
+	 *@param driver to define the driver
+	 *@param element to apply the explicit wait
+	 */
+	public static void explicitWait(WebDriver driver, By targetElement,int timeOut){
+		try{
+			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(targetElement));
+		}catch (TimeoutException e){
+			System.out.println(e.getMessage());
+			throw e;
+		}
+	}
 
-    public static void valueValidation(String ActualValue, String ExpectedValue) {
+
+	public static void waitAndClick(WebDriver driver, WebElement targetElement,int timeOut) {
+		try{
+			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			wait.until(ExpectedConditions.visibilityOf(targetElement));
+			if(targetElement.isDisplayed()){
+				targetElement.click();
+			}
+		}catch (TimeoutException e) {
+			System.out.println(e.getMessage());
+			throw e;
+		}
+	}
+
+	public static void waitAndSendkeys(WebDriver driver, WebElement targetElement,String input,int timeOut){
+		try{
+			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			wait.until(ExpectedConditions.visibilityOf(targetElement));
+			if(targetElement.isDisplayed()){
+				targetElement.sendKeys(input);
+			}else{
+				//fail
+			}
+		}catch (TimeoutException e) {
+			System.out.println(e.getMessage());
+			throw e;
+		}
+	}
+
+	public static Boolean waitForElementAndCheckVisibility(WebDriver driver, WebElement targetElement,int timeOut) {
+		try{
+			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			wait.until(ExpectedConditions.visibilityOf(targetElement));
+			if(targetElement.isDisplayed()){
+				return true;
+			}
+		}catch (TimeoutException e){
+			return false;
+		}
+		return false;
+	}
+
+
+	public static void waitForElementAndClick(WebDriver driver, WebElement targetElement,int timeOut) {
+		try{
+			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			wait.until(ExpectedConditions.visibilityOf(targetElement));
+			if(targetElement.isDisplayed()){
+				targetElement.click();
+			}
+		}catch (TimeoutException e){
+			System.out.println(e.getMessage());
+			throw e;
+		}
+	}
+
+	public static void sendKeys(WebDriver driver, WebElement targetElement,String data, int timeOut,boolean ismandetory, String onFailureMessage){
+		try{
+			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			wait.until(ExpectedConditions.visibilityOf(targetElement));
+			Thread.sleep(2000);
+			targetElement.clear();
+			targetElement.sendKeys(data);    
+		}catch(Exception e){
+			if(ismandetory){
+			}
+		}
+	}
+
+	public static void click(WebDriver driver, WebElement targetElement,boolean ismandetory, int timeOut, String onFailureMessage){
+		try{
+			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			wait.until(ExpectedConditions.visibilityOf(targetElement));
+			targetElement.click(); 
+		}catch(Exception e){
+			if(ismandetory){
+			}
+		}
+	}
+
+	public static Boolean explicitWait(WebDriver driver, WebElement targetElement,int timeout) {
+		try{
+			WebDriverWait wait = new WebDriverWait(driver, timeout);
+			wait.until(ExpectedConditions.visibilityOf(targetElement));   
+			return true;
+		}catch (TimeoutException e){
+			return false;
+		}  
+	}
+
+	public static void waitForElement(WebDriver driver, WebElement targetElement,int timeout) {
+		try{
+			WebDriverWait wait = new WebDriverWait(driver, timeout);
+			wait.until(ExpectedConditions.visibilityOf(targetElement));   
+		}catch (TimeoutException e){
+			throw e;
+		}  
+	}
+
+	public static void valueValidation(String ActualValue, String ExpectedValue) {
 		try{
 			SoftAssert sa=new SoftAssert();
-            sa.assertEquals(ActualValue,ExpectedValue);
+			sa.assertEquals(ActualValue,ExpectedValue);
 			sa.assertAll();
 		}catch (AssertionError e) {} 
 	}
- 
-    /**
-     * method to wait for an element until it is invisible
-     *
-     * @param targetElement element to be invisible
-     * @return true if element gets invisible else throws TimeoutException
-     */
-    public boolean waitForInvisibility(WebDriver driver, By targetElement,int timeOut){
-        try{
-            WebDriverWait wait = new WebDriverWait(driver, timeOut);
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(targetElement));
-            return true;
-        }catch (TimeoutException e){
-            System.out.println(e.getMessage());
-            throw e;
-        }
-    }   
+
+	/**
+	 * method to wait for an element until it is invisible
+	 *
+	 * @param targetElement element to be invisible
+	 * @return true if element gets invisible else throws TimeoutException
+	 */
+	public boolean waitForInvisibility(WebDriver driver, By targetElement,int timeOut){
+		try{
+			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			wait.until(ExpectedConditions.invisibilityOfElementLocated(targetElement));
+			return true;
+		}catch (TimeoutException e){
+			System.out.println(e.getMessage());
+			throw e;
+		}
+	}
+
+
 }

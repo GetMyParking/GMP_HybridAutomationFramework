@@ -17,3 +17,4 @@ public class HomePage {
 		driver.findElement(clickpermit).click();				
 	}
 }
+	

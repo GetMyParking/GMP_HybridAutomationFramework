@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+<parameter name="Tenant" value="GMP" />
+<parameter name="Environment" value="Production" />
+<parameter name="Country" value="Testing" />
+<parameter name="Platform" value="Android" />
+<parameter name="Profile" value="Personal" />
+<listeners>
+	<listener class-name="TestNGListeners.ApcoaListeners"></listener>
+</listeners>
+  <test thread-count="6" name="Test">
+    <classes>
+     <class name="Mobile.CheckViewDetails">
+				<methods>
+					<include name="selectCountry" />
+					<include name="loginAppcoa" />
+					<include name="StartPostpay" />
+					<include name="GmpPostpayWithDiscounts" />
+					<include name="StopPostpay" />
+					<include name="ViewDetails" />
+				     	
+					
+				</methods>
+			</class>
+      
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->

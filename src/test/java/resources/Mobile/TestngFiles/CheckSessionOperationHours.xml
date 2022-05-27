@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+
+	<listeners>
+		<listener class-name="TestNGListeners.ApcoaListeners"></listener>
+	</listeners>
+	<test thread-count="5" name="Test">
+		<parameter name="Tenant" value="Apcoa" />
+		<parameter name="Environment" value="Production" />
+		<parameter name="Country" value="Poland" />
+		<parameter name="Platform" value="Android" />
+		<parameter name="Profile" value="Personal Profile" />
+		<classes>
+			<class name="Mobile.OperationHours">
+				<methods>
+					<include name="selectCountry" />
+					<include name="loginAppcoa" />
+					<include name="SessionAfterOperationalHrs" />
+				</methods>
+			</class>
+		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->

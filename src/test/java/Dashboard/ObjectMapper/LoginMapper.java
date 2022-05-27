@@ -27,4 +27,6 @@ public class LoginMapper {
 	        ", password='" + password + '\'' +
 	        '}';
 	  }
+
+	
 }

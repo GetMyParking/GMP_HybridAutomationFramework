@@ -12,58 +12,57 @@ Purpose /Description: Implementation of the TestNG ITestListener
 
 package TestNGListeners;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import org.apache.commons.io.FileUtils;
+import java.util.function.Consumer;
+
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
-import CommonUtility.AutomationConfiguration;
 import CommonUtility.CreateSession;
-import CommonUtility.ExtentReporterNG;
+import io.qameta.allure.Allure;
+import io.qameta.allure.AllureLifecycle;
+import io.qameta.allure.Attachment;
+import io.qameta.allure.model.TestResult;
 
 /**
  * contains all the methods to ITestListener 
 
  */
 
-public class ApcoaListeners extends CreateSession implements ITestListener{
+public class ApcoaListeners implements ITestListener{
 
-	ExtentReports extent = ExtentReporterNG.getReportObject();
-	static ExtentTest test;
-	
+
+	// Text attachments for Allure
+	@Attachment(value = "Page screenshot", type = "image/png")
+	public byte[] saveScreenshotPNG(WebDriver driver) {
+		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+	}
+
+	// Text attachments for Allure
+	@Attachment(value = "{0}", type = "text/plain")
+	public static String saveTextLog(String message) {
+		return message;
+	}
+
 	public static void logInfo(String info){
 		System.out.println(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss  ").format(new Date()).toString() + info);
-		AutomationConfiguration.Log.info(info);
-		AutomationConfiguration.extentTest.get().log(Status.INFO, info); 
+		saveTextLog(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss  ").format(new Date()).toString() + info);
 	}
-	
-	public static void addScreenshotToReport(String msg) {
+
+	public void addScreenshotToReport(String msg) {
 		WebDriver screenshotdriver ;
 		try{
-			if(AutomationConfiguration.ScreenshotFor.toString().toUpperCase().contains ("WEB")){
-				screenshotdriver = AutomationConfiguration.Driver;
+			if(CreateSession.getAutomationConfiguration().ScreenshotFor.toString().toUpperCase().contains ("WEB")){
+				screenshotdriver = CreateSession.getAutomationConfiguration().Driver;
+			}else{
+				screenshotdriver= CreateSession.getAutomationConfiguration().AppiumDriver;
 			}
-			else{
-				screenshotdriver= AutomationConfiguration.AppiumDriver;
-			}
-			File scr = ((TakesScreenshot)screenshotdriver).getScreenshotAs(OutputType.FILE);		
-			String filename = System.getProperty("user.dir").toString()+"/Output/Screenshot/"+ new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss'.jpg'").format(new Date()).toString();
-			File dest = new File( filename); 
-			FileUtils.copyFile(scr, dest);
-			AutomationConfiguration.extentTest.get().addScreenCaptureFromPath(dest.getAbsolutePath(), msg);
+			saveTextLog(msg);
+			saveScreenshotPNG(screenshotdriver);
 		}catch (Exception e){
 			logInfo("Error in TestNG Listner(taking screenshot on failure): "+e.toString());
 		} 	
@@ -74,15 +73,15 @@ public class ApcoaListeners extends CreateSession implements ITestListener{
 	 *@param context object of ITestContext
 	 */
 	public void onFinish(ITestContext context) {
-		logInfo("Ends Succcessfully ");
-		extent.flush();
-		Path sourceDirectory = Paths.get(AutomationConfiguration.ExtentReportFilePath) ;//Paths.get("/Users/karankumaragarwal/eclipse-workspace/GMP_Automation_Framework/Output/Reports/ExtentReport2022_01_13___02_41_00.html");
-        Path targetDirectory = Paths.get("/Users/karankumaragarwal/Downloads/lastRunReport.html");
-        try {
-            Files.copy(sourceDirectory, targetDirectory,StandardCopyOption.REPLACE_EXISTING);
-        }catch (IOException e) {
-            System.out.println(e.toString());
-        }
+		//		logInfo("Ends Succcessfully ");
+		//		extent.flush();
+		//		Path sourceDirectory = Paths.get(AutomationConfiguration.ExtentReportFilePath) ;//Paths.get("/Users/karankumaragarwal/eclipse-workspace/GMP_Automation_Framework/Output/Reports/ExtentReport2022_01_13___02_41_00.html");
+		//        Path targetDirectory =  Paths.get(System.getProperty("user.dir").toString()+"/lastRunReport.html");
+		//        try {
+		//            Files.copy(sourceDirectory, targetDirectory,StandardCopyOption.REPLACE_EXISTING);
+		//        }catch (IOException e) {
+		//            System.out.println(e.toString());
+		//        }
 	}
 
 	/**
@@ -91,10 +90,20 @@ public class ApcoaListeners extends CreateSession implements ITestListener{
 	 *@param result object of ITestResult
 	 */
 
+	public void changeTestName(final ITestResult result) {
+		AllureLifecycle lifecycle = Allure.getLifecycle();
+		lifecycle.updateTestCase(new Consumer<TestResult>() {
+			@Override
+			public void accept(TestResult testResult) {
+				//System.out.println("Name changed : *************************** "+result.getMethod().getMethodName().toUpperCase());
+				testResult.setName(result.getMethod().getMethodName().toUpperCase()+" ("+CreateSession.getAutomationConfiguration().Country+")");
+			}
+		});
+	}
+
 	public void onTestStart(ITestResult result) { 
-		test = extent.createTest(result.getMethod().getMethodName().toUpperCase()+" ("+AutomationConfiguration.Country+")");
-		AutomationConfiguration.extentTest.set(test);
-		logInfo("New Test started: --> "+result.getMethod().getMethodName()+" ("+AutomationConfiguration.Country+")");
+		changeTestName(result);
+		logInfo("New Test started: --> "+result.getMethod().getMethodName()+" ("+CreateSession.getAutomationConfiguration().Country+")");
 	}
 
 	/**
@@ -103,8 +112,7 @@ public class ApcoaListeners extends CreateSession implements ITestListener{
 	 *@param result object of ITestResult
 	 */
 	public void onTestSuccess(ITestResult result) { 
-		AutomationConfiguration.extentTest.get().log(Status.PASS, "Test Passed");
-		logInfo("Test end:(Success) --> "+result.getMethod().getMethodName()+" ("+AutomationConfiguration.Country+")");
+		logInfo("Test end:(Success) --> "+result.getMethod().getMethodName()+" ("+CreateSession.getAutomationConfiguration().Country+")");
 	}
 
 	/**
@@ -114,15 +122,15 @@ public class ApcoaListeners extends CreateSession implements ITestListener{
 	 */
 	@Override
 	public void onTestFailure(ITestResult result){ 
-		logInfo("Test end:(Fail) --> "+result.getMethod().getMethodName()+" ("+AutomationConfiguration.Country+")");
-		AutomationConfiguration.extentTest.get().log(Status.FAIL, " Reason for failure: "+result.getThrowable().toString());
+		logInfo("Test end:(Fail) --> "+result.getMethod().getMethodName()+" ("+CreateSession.getAutomationConfiguration().Country+"):"+result.getThrowable().toString());
 		addScreenshotToReport(result.getMethod().getMethodName()+": "+result.getThrowable().toString());
 	}
 
 
 	public void onTestSkipped(ITestResult result){  
-		logInfo("Test skipped: "+result.getMethod().getMethodName()+" ("+AutomationConfiguration.Country+")");
-		AutomationConfiguration.extentTest.get().log(Status.SKIP, "Test Skipped");
+		logInfo("Test skipped: "+result.getMethod().getMethodName()+" ("+CreateSession.getAutomationConfiguration().Country+"):"+result.getThrowable().toString());
+		addScreenshotToReport(result.getMethod().getMethodName()+": "+result.getThrowable().toString());
+		
 	}
 
 	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {   }

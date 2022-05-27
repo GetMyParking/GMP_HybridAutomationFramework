@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import CommonUtility.AutomationConfiguration;
 import CommonUtility.CreateSession;
 import Pages.Dashboard.PageLogin;
 
@@ -16,7 +15,7 @@ public class TestLogin {
 	
 	@Test
 	public void login() throws InterruptedException{
-		PageLogin dl = PageFactory.initElements(AutomationConfiguration.Driver, PageLogin.class);
+		PageLogin dl = PageFactory.initElements(CreateSession.getAutomationConfiguration().Driver, PageLogin.class);
 		dl.enterCredentials("dashboard_user", "dashboard_user");
 		dl.clickLoginBtn();
 	}
@@ -24,7 +23,8 @@ public class TestLogin {
 	
 	@BeforeMethod
 	public void lauchweb() throws IOException{
-		CreateSession.readConfigFile("/src/test/java/resources/configDashboard.properties");
+		CreateSession cs = new CreateSession();
+		cs.readConfigFile("/src/test/java/resources/configDashboard.properties","");
 	}
 
 }

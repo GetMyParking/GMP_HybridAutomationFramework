@@ -8,7 +8,7 @@ Purpose /Description: This Class for loading config file and
 	creating the using of selenium and appium.
 -------------------------------------------------------------
 
-*/
+ */
 package CommonUtility;
 
 import java.io.File;
@@ -18,158 +18,174 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class CreateSession {
-	
-	public WebDriver getDriver()	{
-		return AutomationConfiguration.Driver;
-	}
+
+	DemoAutomationConfiguration automationConfiguration;
+	public static ThreadLocal<DemoAutomationConfiguration> tac = new ThreadLocal<DemoAutomationConfiguration>();
+
 	
 	/**
-     * method to read the Config File and launch drivers according to configuration
+	 * method to read the Config File and launch drivers according to configuration
 	 * @throws InterruptedException 
-     *
-     */
-	public static void readConfigFile(String path) throws IOException{
-		AutomationConfiguration.logInfo("Start reading config file");
+	 *
+	 */
+	public void readConfigFile(String path,String Platform) throws IOException{
+		automationConfiguration = new DemoAutomationConfiguration();
+		automationConfiguration.Platform = Platform;
+		System.out.println("Start reading config file");
 
 		String pathforconfig=System.getProperty("user.dir").toString()+path.toString();
-		
+
 		FileInputStream fis = new FileInputStream(pathforconfig.toString());
-		AutomationConfiguration.PropertyFile = new Properties();
-		AutomationConfiguration.PropertyFile.load(fis);
-		AutomationConfiguration.DesiredCap = new DesiredCapabilities();
-				
-		AutomationConfiguration.ScreenshotFor = AutomationConfiguration.PropertyFile.getProperty("screenshotfor").toString();
-		AutomationConfiguration.LaunchBrowser = AutomationConfiguration.PropertyFile.getProperty("launchbrowser").toString();
-		AutomationConfiguration.LaunchMobileApp = AutomationConfiguration.PropertyFile.getProperty("launchmobileapp").toString();
-		AutomationConfiguration.Platform = AutomationConfiguration.PropertyFile.getProperty("platformName").toString();
-		AutomationConfiguration.logInfo("Read Complete property file.");
-		
-		if(AutomationConfiguration.LaunchBrowser.toUpperCase().equals("TRUE")){
-			AutomationConfiguration.logInfo("Starting launching web for testing.");
-			launchWebDriver();
-		}if(AutomationConfiguration.LaunchMobileApp.toUpperCase().equals("TRUE")){
-			AutomationConfiguration.logInfo("Starting launching mobile app ");
-			if(AutomationConfiguration.Platform.toUpperCase().equals("ANDROID")){
-				AutomationConfiguration.logInfo("Platform: Android");
-				launchAndroidDriver();
-			}else if(AutomationConfiguration.Platform.toString().toUpperCase().equals("IOS")){
-				AutomationConfiguration.logInfo("Platform: IOS");
-				launchiOSDriver();}
-			else{
-				AutomationConfiguration.logInfo("Platform name is invalid cannot launch any test.");
+		Properties PropertyFile = new Properties();
+		PropertyFile.load(fis);
+		automationConfiguration.DesiredCap = new DesiredCapabilities();
+
+		automationConfiguration.ScreenshotFor = PropertyFile.getProperty("screenshotfor").toString();
+		automationConfiguration.LaunchBrowser = PropertyFile.getProperty("launchbrowser").toString();
+		automationConfiguration.LaunchMobileApp = PropertyFile.getProperty("launchmobileapp").toString();
+		System.out.println("Read Complete property file.");
+
+		if(automationConfiguration.LaunchBrowser.toUpperCase().equals("TRUE")){
+			//AutomationConfiguration.logInfo("Starting launching web for testing.");
+			launchWebDriver(PropertyFile);
+		}if(automationConfiguration.LaunchMobileApp.toUpperCase().equals("TRUE")){
+			System.out.println("Starting launching mobile app ");
+			if(Platform.toUpperCase().equals("ANDROID")){
+				System.out.println("Platform: Android");
+				launchAndroidDriver(PropertyFile);
+			}else if(Platform.toString().toUpperCase().equals("IOS")){
+				System.out.println("Platform: IOS");
+				launchiOSDriver(PropertyFile);
+			}else{
+				//AutomationConfiguration.logInfo("Platform name is invalid cannot launch any test.");
 			}
 		}
+		tac.set(automationConfiguration);
+		
 	}
 	
-	
+	public static synchronized DemoAutomationConfiguration getAutomationConfiguration() {
+		return tac.get();
+	}
+
+
 	/**
-     * method to launch the android driver
-     *
-     *@param capabilities to give the desiredcapabilities
-     */
-	
-	public synchronized static void launchAndroidDriver() throws MalformedURLException{		
+	 * method to launch the android driver
+	 *
+	 *@param capabilities to give the desiredcapabilities
+	 */
+
+	public synchronized void launchAndroidDriver(Properties PropertyFile) throws MalformedURLException{		
 		try {
-			AutomationConfiguration.logInfo("Launching android app");
-						
-			AutomationConfiguration.DesiredCap.setCapability("deviceName", AutomationConfiguration.PropertyFile.getProperty("deviceName").toString());
-			AutomationConfiguration.DesiredCap.setCapability("platformName",AutomationConfiguration.PropertyFile.getProperty("platformName").toString());
-			AutomationConfiguration.DesiredCap.setCapability("appActivity", AutomationConfiguration.PropertyFile.getProperty("appActivity").toString());
-			AutomationConfiguration.DesiredCap.setCapability("app",new File( AutomationConfiguration.PropertyFile.getProperty("app").toString()).getAbsolutePath());
-			AutomationConfiguration.DesiredCap.setCapability(MobileCapabilityType.FULL_RESET, true);
-			AutomationConfiguration.DesiredCap.setCapability("automationName", AutomationConfiguration.PropertyFile.getProperty("automationName").toString());
-			AutomationConfiguration.DesiredCap.setCapability("uiautomator2ServerLaunchTimeout",Integer.parseInt(AutomationConfiguration.PropertyFile.getProperty("uiautomator2ServerLaunchTimeout")));
-			AutomationConfiguration.DesiredCap.setCapability("appWaitDuration",Integer.parseInt(AutomationConfiguration.PropertyFile.getProperty("appWaitDuration")));
-			AutomationConfiguration.DesiredCap.setCapability("udid", AutomationConfiguration.PropertyFile.getProperty("udid").toString());
-			AutomationConfiguration.DesiredCap.setCapability("adbExecTimeout", 25000);
-			AutomationConfiguration.DesiredCap.setCapability("autoGrantPermissions", true);
-			
-			AutomationConfiguration.AppiumServerURL = AutomationConfiguration.PropertyFile.getProperty("appiumserverurl").toString();
+			System.out.println("Inside the launchandroid");
+			automationConfiguration.DesiredCap.setCapability("deviceName", PropertyFile.getProperty("deviceName").toString());
+			automationConfiguration.DesiredCap.setCapability("platformName",PropertyFile.getProperty("platformName").toString());
+			automationConfiguration.DesiredCap.setCapability("appActivity", PropertyFile.getProperty("appActivity").toString());
+			automationConfiguration.DesiredCap.setCapability("app",new File( PropertyFile.getProperty("app").toString()).getAbsolutePath());
+			automationConfiguration.DesiredCap.setCapability(MobileCapabilityType.FULL_RESET, true);
+			automationConfiguration.DesiredCap.setCapability("automationName", PropertyFile.getProperty("automationName").toString());
+			automationConfiguration.DesiredCap.setCapability("uiautomator2ServerLaunchTimeout",Integer.parseInt(PropertyFile.getProperty("uiautomator2ServerLaunchTimeout")));
+			automationConfiguration.DesiredCap.setCapability("appWaitDuration",Integer.parseInt(PropertyFile.getProperty("appWaitDuration")));
+			automationConfiguration.DesiredCap.setCapability("udid", PropertyFile.getProperty("udid").toString());
+			automationConfiguration.DesiredCap.setCapability("adbExecTimeout", 25000);
+			automationConfiguration.DesiredCap.setCapability("autoGrantPermissions", true);
+
+			System.out.println("before launchandroid");
+			automationConfiguration.AppiumServerURL = PropertyFile.getProperty("appiumserverurl").toString();
+			System.out.println("before launchandroid");
 			for(int i=0;i<5;i++) {
 				try {
-					AutomationConfiguration.AppiumDriver = new AndroidDriver<>(new URL(AutomationConfiguration.AppiumServerURL), AutomationConfiguration.DesiredCap);
+					automationConfiguration.AppiumDriver = new AndroidDriver<>(new URL(automationConfiguration.AppiumServerURL), automationConfiguration.DesiredCap);
+					//AndroidDriver driver = (AndroidDriver) new RemoteWebDriver(new URL("http://127.0.0.1:4723/wd/hub"),
+					//		AutomationConfiguration.DesiredCap);
 					break;
 				}catch(Exception e) {
-					AutomationConfiguration.DesiredCap.setCapability("appWaitDuration",Integer.parseInt((String) AutomationConfiguration.DesiredCap.getCapability("appWaitDuration"))+3000);
+					System.out.println(e.toString());
+					automationConfiguration.DesiredCap.setCapability("appWaitDuration",Integer.parseInt((String) automationConfiguration.DesiredCap.getCapability("appWaitDuration"))+3000);
 					Thread.sleep(3000);
 				}
 			}
-			AutomationConfiguration.AppiumDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-			AutomationConfiguration.logInfo("Successfully launched android app");	
+			automationConfiguration.AppiumDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+			//AutomationConfiguration.logInfo("Successfully launched android app");	
 		}catch(Exception e){
-			AutomationConfiguration.logInfo("Error in launching android app. Exception: "+e.toString());
+			System.out.println(e.toString());
+			//AutomationConfiguration.logInfo("Error in launching android app. Exception: "+e.toString());
 		}
 	}
-	public static void main(String[] args) throws MalformedURLException, InterruptedException {
-		launchiOSDriver();
-	}
+	
+//	public static void main(String[] args) throws InterruptedException, IOException {
+//		AutomationConfiguration.Tenant = "Apcoa";
+//		AutomationConfiguration.Environment = "Staging";
+//		AutomationConfiguration.Country = "Austria";
+//		AutomationConfiguration.Platform = "IOS";
+//		CreateSession.readConfigFile("/src/test/java/resources/"+AutomationConfiguration.Platform+AutomationConfiguration.Tenant+".properties");
+//			
+//	}
 	/**
-     * method to launch the IOS driver
-     *
-     *@param capabilities to give the desiredcapabilities
+	 * method to launch the IOS driver
+	 *
+	 *@param capabilities to give the desiredcapabilities
+	 * @throws IOException 
 	 * @throws InterruptedException 
-     */
-	public synchronized static void launchiOSDriver() throws MalformedURLException {
-		AutomationConfiguration.DesiredCap = new DesiredCapabilities();
-		AutomationConfiguration.DesiredCap.setCapability("udid", "7FF3FEC3-BA90-4BAC-AFAC-2D2448384AA6");
-		AutomationConfiguration.DesiredCap.setCapability("deviceName", "IPhone 11");
-		AutomationConfiguration.DesiredCap.setCapability("platformName", "IOS");
-		AutomationConfiguration.DesiredCap.setCapability("app","/Users/karankumaragarwal/Downloads/APCOA FLOW.app");
-		AutomationConfiguration.DesiredCap.setCapability("automationName", "XCUITest");
+	 */
+	public synchronized void launchiOSDriver(Properties PropertyFile) throws IOException {
 		
-		AutomationConfiguration.AppiumDriver  = new IOSDriver( new URL("http://127.0.0.1:4723/wd/hub"), AutomationConfiguration.DesiredCap);
-		try {
-		Thread.sleep(8000);
-		}catch(Exception e) {}
-		AutomationConfiguration.AppiumDriver.findElement(By.xpath("//XCUIElementTypeTextField")).click();
-		try {
-			Thread.sleep(2000);
-			}catch(Exception e) {}
-			System.out.println(AutomationConfiguration.AppiumDriver.findElement(By.xpath("//XCUIElementTypePickerWheel")).getText());
-			AutomationConfiguration.AppiumDriver.findElement(By.xpath("//XCUIElementTypePickerWheel")).sendKeys("Sweden");
+		
+		automationConfiguration.DesiredCap = new DesiredCapabilities();
+		
+		automationConfiguration.DesiredCap.setCapability("udid", PropertyFile.getProperty("iosudid").toString());
+		automationConfiguration.DesiredCap.setCapability("deviceName", PropertyFile.getProperty("iosdeviceName").toString());
+		automationConfiguration.DesiredCap.setCapability("platformName",PropertyFile.getProperty("iosplatformName").toString());
+		automationConfiguration.DesiredCap.setCapability("automationName", PropertyFile.getProperty("iosautomationName").toString());
+		automationConfiguration.DesiredCap.setCapability("app",new File( PropertyFile.getProperty("iosapp").toString()).getAbsolutePath());
+		
+		automationConfiguration.AppiumDriver  = new AppiumDriver<WebElement>( new URL("http://127.0.0.1:4723/wd/hub"), automationConfiguration.DesiredCap);
+		
+	
 	}
-
+	
 	/**
-     * method to launch the Webdriver for Web App
-     *
-     */
-	public static void launchWebDriver(){
+	 * method to launch the Webdriver for Web App
+	 *
+	 */
+	public void launchWebDriver(Properties PropertyFile){
 		try {
-			AutomationConfiguration.BrowserName = AutomationConfiguration.PropertyFile.getProperty("browser").toString();
-			AutomationConfiguration.URL = AutomationConfiguration.PropertyFile.getProperty("url").toString();
-			if(AutomationConfiguration.BrowserName.toUpperCase().equals("CHROME")){
-					AutomationConfiguration.logInfo("Launching Chrome browser");
-					WebDriverManager.chromedriver().setup();
-					AutomationConfiguration.Driver = new ChromeDriver();
-					AutomationConfiguration.Driver.manage().window().maximize();
-					AutomationConfiguration.logInfo("Sucessfully launched Chrome Browser");
-			}else if (AutomationConfiguration.BrowserName.toUpperCase().equals("FIREFOX")){
-				AutomationConfiguration.logInfo("Launching Firefox browser");
+			automationConfiguration.BrowserName = PropertyFile.getProperty("browser").toString();
+			automationConfiguration.URL = PropertyFile.getProperty("url").toString();
+			if(automationConfiguration.BrowserName.toUpperCase().equals("CHROME")){
+				//automationConfiguration.logInfo("Launching Chrome browser");
+				WebDriverManager.chromedriver().setup();
+				automationConfiguration.Driver = new ChromeDriver();
+				automationConfiguration.Driver.manage().window().maximize();
+				//automationConfiguration.logInfo("Sucessfully launched Chrome Browser");
+			}else if (automationConfiguration.BrowserName.toUpperCase().equals("FIREFOX")){
+				//automationConfiguration.logInfo("Launching Firefox browser");
 				WebDriverManager.firefoxdriver().setup();
-				AutomationConfiguration.Driver.manage().window().maximize();
-				AutomationConfiguration.logInfo("Sucessfully launched Firefox Browser");
-			}else if (AutomationConfiguration.BrowserName.toUpperCase().equals("IE")){
-				AutomationConfiguration.logInfo("Launching Internet Explorer browser");
+				automationConfiguration.Driver.manage().window().maximize();
+				//automationConfiguration.logInfo("Sucessfully launched Firefox Browser");
+			}else if (automationConfiguration.BrowserName.toUpperCase().equals("IE")){
+				//automationConfiguration.logInfo("Launching Internet Explorer browser");
 				WebDriverManager.iedriver().setup();
-				AutomationConfiguration.Driver.manage().window().maximize();
-				AutomationConfiguration.logInfo("Sucessfully launched Internet Explorer Browser");
+				automationConfiguration.Driver.manage().window().maximize();
+				//AutomationConfiguration.logInfo("Sucessfully launched Internet Explorer Browser");
 			}else{
-				AutomationConfiguration.logInfo("Invalid browser type. Cannot launch.");
+				//AutomationConfiguration.logInfo("Invalid browser type. Cannot launch.");
 			}
 		}catch(Exception e){
-			AutomationConfiguration.logInfo("Exception in launching browser: "+ e.toString());
-		}		
+			//AutomationConfiguration.logInfo("Exception in launching browser: "+ e.toString());
+		}	
+		
 	}
 }
 

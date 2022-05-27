@@ -128,7 +128,7 @@ public class AppiumGenericMethods extends CreateSession
         } 
         catch (NoSuchElementException e) 
         {
-        	AutomationConfiguration.Log.error("Element not found");
+        	//CreateSession.getAutomationConfiguration().Log.error("Element not found");
         	throw e;
         }
     }
@@ -149,7 +149,7 @@ public class AppiumGenericMethods extends CreateSession
         catch (NoSuchElementException e) 
         {
             //Log.logError(this.getClass().getName(), "findElements", "element not found" + locator);
-        	AutomationConfiguration.Log.error("Element not found");
+        	//CreateSession.getAutomationConfiguration().Log.error("Element not found");
         	
         	throw e;
         }
@@ -275,14 +275,14 @@ public class AppiumGenericMethods extends CreateSession
         if (contextNames.contains(context)) 
         {
             ((AppiumDriver<WebElement>) driver).context(context);
-            AutomationConfiguration.Log.info("Context changed successfully");
+           // AutomationConfiguration.Log.info("Context changed successfully");
         } 
         else 
         {
-        	AutomationConfiguration.Log.info(context + "not found on this page");
+        	//AutomationConfiguration.Log.info(context + "not found on this page");
         }
 
-        AutomationConfiguration.logInfo("Current context" + ((AppiumDriver<WebElement>) driver).getContext());
+     //   AutomationConfiguration.logInfo("Current context" + ((AppiumDriver<WebElement>) driver).getContext());
     }
 
     /**
@@ -300,12 +300,12 @@ public class AppiumGenericMethods extends CreateSession
             LongPressOptions longPressOptions = new LongPressOptions();
             longPressOptions.withElement(ElementOption.element(element));
             touch.longPress(longPressOptions).release().perform();
-            AutomationConfiguration.logInfo("Long press successful on element: " + element);
+       //     AutomationConfiguration.logInfo("Long press successful on element: " + element);
         } 
         catch (NoSuchElementException e) 
         {
             //Log.logError(this.getClass().getName(), "findElement", "Element not found" + locator);
-        	AutomationConfiguration.Log.error("Element not found");
+        //	AutomationConfiguration.Log.error("Element not found");
         	throw e;
         }
 
@@ -325,7 +325,7 @@ public class AppiumGenericMethods extends CreateSession
 		PointOption pointOption = new PointOption();
         pointOption.withCoordinates(x, y);
         touch.longPress(pointOption).release().perform();
-        AutomationConfiguration.logInfo("Long press successful on coordinates: " + "( " + x + "," + y + " )");
+      //  AutomationConfiguration.logInfo("Long press successful on coordinates: " + "( " + x + "," + y + " )");
 
     }
 
@@ -347,12 +347,12 @@ public class AppiumGenericMethods extends CreateSession
             LongPressOptions longPressOptions = new LongPressOptions();
             longPressOptions.withPosition(new PointOption().withCoordinates(x, y)).withElement(ElementOption.element(element));
             touch.longPress(longPressOptions).release().perform();
-            AutomationConfiguration.logInfo("Long press successful on element: " + element + "on coordinates" + "( " + x + "," + y + " )");
+       //     AutomationConfiguration.logInfo("Long press successful on element: " + element + "on coordinates" + "( " + x + "," + y + " )");
         } 
         catch (NoSuchElementException e) 
         {
             //Log.logError(this.getClass().getName(), "findElement", "Element not found" + locator);
-        	AutomationConfiguration.Log.error("Element not found");
+        //	AutomationConfiguration.Log.error("Element not found");
         	throw e;
         }
 
